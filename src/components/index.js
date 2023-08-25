@@ -1,3 +1,4 @@
-import TabBar from './TabBar';
+import SearchBar from './SearchBar';
+import ImageList from './ImageList';
 
-export {TabBar};
+export {SearchBar, ImageList};

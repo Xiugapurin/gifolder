@@ -2,21 +2,18 @@ import {Dimensions} from 'react-native';
 const {height, width} = Dimensions.get('window');
 
 import Entypo from 'react-native-vector-icons/Entypo';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 export const Colors = {
-  PRIMARY_COLOR: '#F98D2A',
-  SECONDARY_COLOR: '#F1AD7C',
-  TITLE_COLOR: '#4C5178',
-  PARAGRAPH_COLOR: '#4F4F4F',
-  INACTIVE_COLOR: '#4F4F4F',
-  BACKGROUND_COLOR: '#F4F4F4',
-  UNFOCUS_COLOR: '#C4C4C4',
-  CANCEL_COLOR: '#E74D38',
-  DARK_GRAY_COLOR: '#212121',
-  LIGHT_YELLOW_COLOR: '#EDCA6F',
-  MODAL_INPUT_COLOR: '#FCFCFC',
-  WHITE_COLOR: '#FFFFFF',
-  TRANSPARENT_COLOR: 'rgba(241, 241, 241, 0.5)',
+  PRIMARY: '#5662F6',
+  SECONDARY: '#A7ACED',
+  TITLE: '#4C5178',
+  PARAGRAPH: '#4F4F4F',
+  INACTIVE: '#4F4F4F',
+  GRAY: '#E6E6E6',
+  UNFOCUS: '#C4C4C4',
+  CANCEL: '#E74D38',
+  WHITE: '#FFFFFF',
 };
 
 export const DeviceSize = {
@@ -26,4 +23,5 @@ export const DeviceSize = {
 
 export const Icons = {
   Entypo,
+  Ionicons,
 };

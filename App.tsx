@@ -5,7 +5,7 @@ import { Icons, Colors } from "./src/utils";
 import { Recent, Folder } from './src/pages';
 import { Text } from 'react-native';
 
-const { PRIMARY_COLOR, INACTIVE_COLOR } = Colors;
+const { PRIMARY, INACTIVE } = Colors;
 const { Entypo } = Icons;
 
 const Tab = createBottomTabNavigator();
@@ -16,7 +16,7 @@ function App(): JSX.Element {
       <Tab.Navigator screenOptions={({ route }) => ({
         tabBarIcon: ({ focused }) => {
           let icon;
-          const iconColor = focused ? PRIMARY_COLOR : INACTIVE_COLOR;
+          const iconColor = focused ? PRIMARY : INACTIVE;
 
           switch (route.name) {
             case "Recent":
@@ -33,7 +33,7 @@ function App(): JSX.Element {
         },
         tabBarLabel: ({ focused }) => {
           let label;
-          const labelColor = focused ? PRIMARY_COLOR : INACTIVE_COLOR;
+          const labelColor = focused ? PRIMARY : INACTIVE;
 
           switch (route.name) {
             case "Recent":
