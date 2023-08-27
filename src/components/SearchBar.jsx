@@ -24,11 +24,13 @@ const SearchBar = () => {
         maxLength={10}
       />
 
-      {searchParam.length > 0 && (
-        <TouchableOpacity style={styles.button}>
-          <Ionicons name="search" color={Colors.PRIMARY} size={24} />
-        </TouchableOpacity>
-      )}
+      <TouchableOpacity style={styles.button}>
+        <Ionicons
+          name="search"
+          color={searchParam.length > 0 ? Colors.PRIMARY : Colors.INACTIVE}
+          size={28}
+        />
+      </TouchableOpacity>
     </View>
   );
 };
@@ -50,7 +52,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   button: {
-    marginLeft: 12,
+    marginLeft: 16,
     justifyContent: 'center',
     alignItems: 'center',
   },

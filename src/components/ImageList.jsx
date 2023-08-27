@@ -1,7 +1,7 @@
-import {Image, View, FlatList, StyleSheet} from 'react-native';
+import {Text, Image, View, FlatList, StyleSheet} from 'react-native';
 import React, {useMemo} from 'react';
-
-import MasonryList from '@react-native-seoul/masonry-list';
+import FastImage from 'react-native-fast-image';
+import {Colors} from '../utils';
 
 const images = [
   {id: '1', imgURL: 'https://pbs.twimg.com/media/F4WEWa2WAAAZ35V.png'},
@@ -183,13 +183,14 @@ const Card = ({item, style}) => {
 
   return (
     <View key={item.id} style={[{marginTop: 12, flex: 1}, style]}>
-      <Image
+      <FastImage
         source={{uri: item.imgURL}}
         style={{
-          height: randomBool ? 150 : 280,
-          alignSelf: 'stretch',
+          height: randomBool ? 150 : 150,
+          width: '100%',
+          // alignSelf: 'stretch',
         }}
-        resizeMode="cover"
+        resizeMode="contain"
       />
     </View>
   );
@@ -203,7 +204,9 @@ const ImageList = () => {
   return (
     <FlatList
       keyExtractor={item => item.id}
+      showsVerticalScrollIndicator={false}
       ListHeaderComponent={<View />}
+      ListFooterComponent={<View style={{height: 100}} />}
       contentContainerStyle={{
         alignSelf: 'stretch',
       }}
