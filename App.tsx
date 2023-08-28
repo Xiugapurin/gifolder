@@ -26,6 +26,9 @@ const MainTab = () => (
         case "Folder":
           icon = <Entypo name="folder" color={iconColor} size={20} />;
           break;
+        case "Upload":
+          icon = <Entypo name="upload" color={iconColor} size={20} />;
+          break;
         default:
           break;
       }
@@ -43,6 +46,9 @@ const MainTab = () => (
         case "Folder":
           label = <Text style={{color:labelColor, fontSize: 12}}>收藏夾</Text>
           break;
+        case "Upload":
+          label = <Text style={{color:labelColor, fontSize: 12}}>新增圖片</Text>
+          break;
         default:
           break;
       }
@@ -55,6 +61,7 @@ const MainTab = () => (
   })}>
     <Tab.Screen name="Recent" component={Recent} />
     <Tab.Screen name="Folder" component={Folder} />
+    <Tab.Screen name="Upload" component={Upload} />
   </Tab.Navigator>
 )
 
@@ -63,7 +70,6 @@ const  App = () => {
     <NavigationContainer>
       <Stack.Navigator screenOptions={{headerShown: false}}>
         <Stack.Screen name="Home" component={MainTab} />
-        <Stack.Screen name="Upload" component={Upload} />
       </Stack.Navigator>
     </NavigationContainer>
   );

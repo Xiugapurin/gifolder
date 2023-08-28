@@ -1,6 +1,7 @@
 import {Text, Image, View, FlatList, StyleSheet} from 'react-native';
 import React, {useMemo} from 'react';
 import FastImage from 'react-native-fast-image';
+import {useFetchImages} from '../hooks/useImage';
 import {Colors} from '../utils';
 
 const images = [
@@ -182,9 +183,9 @@ const Card = ({item, style}) => {
   const randomBool = useMemo(() => Math.random() < 0.5, []);
 
   return (
-    <View key={item.id} style={[{marginTop: 12, flex: 1}, style]}>
+    <View style={[{marginTop: 12, flex: 1}, style]}>
       <FastImage
-        source={{uri: item.imgURL}}
+        source={{uri: item.uri}}
         style={{
           height: randomBool ? 150 : 150,
           width: '100%',
@@ -201,9 +202,19 @@ const RenderItem = ({item, i}) => {
 };
 
 const ImageList = () => {
+  const {images, loading, error} = useFetchImages();
+
+  if (loading) {
+    return <Text>讀取中...</Text>;
+  }
+
+  if (error) {
+    return <Text>錯誤：{error}</Text>;
+  }
+
   return (
     <FlatList
-      keyExtractor={item => item.id}
+      keyExtractor={item => item.ID}
       showsVerticalScrollIndicator={false}
       ListHeaderComponent={<View />}
       ListFooterComponent={<View style={{height: 100}} />}

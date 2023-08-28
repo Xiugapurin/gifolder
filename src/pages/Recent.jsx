@@ -15,14 +15,14 @@ const Recent = () => {
       <SearchBar />
       <Text style={styles.title}>最近使用</Text>
       <ImageList />
-      <TouchableOpacity
+      {/* <TouchableOpacity
         style={styles.button}
         activeOpacity={0.9}
         onPress={() => {
           navigation.navigate('Upload');
         }}>
         <Entypo name="plus" color={Colors.WHITE} size={36} />
-      </TouchableOpacity>
+      </TouchableOpacity> */}
     </View>
   );
 };
