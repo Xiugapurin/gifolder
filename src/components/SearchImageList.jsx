@@ -12,11 +12,10 @@ import Modal from 'react-native-modal';
 import LottieView from 'lottie-react-native';
 import Clipboard from '@react-native-clipboard/clipboard';
 import {useFetchImagesBySearchParam} from '../hooks/useImage';
-import {Colors, Icons} from '../utils';
+import {Colors} from '../utils';
 import CardMenuModal from './modals/CardMenuModal';
-import {useNavigation} from '@react-navigation/native';
-
-const {Ionicons, Entypo} = Icons;
+import Loading from './Loading';
+import Error from './Error';
 
 const Card = ({item, i, setActiveItem, toggleModal}) => {
   const onCardPress = async () => {
@@ -63,7 +62,7 @@ const EmptyComponent = () => {
         alignItems: 'center',
       }}>
       <LottieView
-        style={{width: '100%'}}
+        style={{width: '80%'}}
         autoPlay
         loop
         source={require('../assets/animations/search_failed.json')}
@@ -81,11 +80,11 @@ const SearchImageList = ({searchParam}) => {
     useFetchImagesBySearchParam(searchParam);
 
   if (isLoading) {
-    return <Text>讀取中...</Text>;
+    return <Loading />;
   }
 
   if (error) {
-    return <Text>錯誤：{error}</Text>;
+    return <Error />;
   }
 
   const toggleModal = () => {
@@ -111,6 +110,7 @@ const SearchImageList = ({searchParam}) => {
         />
       </Modal>
 
+      <Text style={styles.title}>搜尋結果</Text>
       <FlatList
         keyExtractor={item => item.ID}
         showsVerticalScrollIndicator={false}
@@ -146,6 +146,12 @@ const SearchImageList = ({searchParam}) => {
 export default SearchImageList;
 
 const styles = StyleSheet.create({
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: Colors.TITLE,
+    marginBottom: 12,
+  },
   card: {
     flex: 1,
     justifyContent: 'space-between',

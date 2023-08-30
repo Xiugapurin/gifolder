@@ -40,7 +40,6 @@ const Search = () => {
         </View>
       </View>
 
-      <Text style={styles.title}>{isSearching ? '搜尋結果' : ''}</Text>
       {isSearching ? (
         <SearchImageList searchParam={searchParam} />
       ) : (
@@ -72,12 +71,6 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingVertical: 36,
     paddingHorizontal: 24,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: Colors.TITLE,
-    marginBottom: 12,
   },
   searchBarContainer: {
     flexDirection: 'row',

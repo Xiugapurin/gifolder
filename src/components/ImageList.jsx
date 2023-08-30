@@ -14,6 +14,8 @@ import {useFetchImages} from '../hooks/useImage';
 import {Colors, Icons} from '../utils';
 import CardMenuModal from './modals/CardMenuModal';
 import {useNavigation} from '@react-navigation/native';
+import Loading from './Loading';
+import Error from './Error';
 
 // import MasonryList from '@react-native-seoul/masonry-list';
 
@@ -83,11 +85,11 @@ const ImageList = () => {
   const {images, isLoading, onRefresh, error} = useFetchImages();
 
   if (isLoading) {
-    return <Text>讀取中...</Text>;
+    return <Loading />;
   }
 
   if (error) {
-    return <Text>錯誤：{error}</Text>;
+    return <Error />;
   }
 
   const toggleModal = () => {
