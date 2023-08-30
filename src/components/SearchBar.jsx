@@ -10,9 +10,7 @@ import {Colors, Icons} from '../utils';
 
 const {Ionicons} = Icons;
 
-const SearchBar = () => {
-  const [searchParam, setSearchParam] = useState('');
-
+const SearchBar = ({searchParam, setSearchParam}) => {
   return (
     <View style={styles.container}>
       <TextInput

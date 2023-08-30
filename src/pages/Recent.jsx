@@ -1,5 +1,5 @@
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import React from 'react';
+import React, {useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
 
 import {Colors, Icons} from '../utils';
@@ -8,21 +8,14 @@ import {SearchBar, ImageList} from '../components';
 const {Entypo} = Icons;
 
 const Recent = () => {
-  const navigation = useNavigation();
-
   return (
     <View style={styles.container}>
-      <SearchBar />
-      <Text style={styles.title}>最近使用</Text>
+      <View style={styles.header}>
+        <Entypo name="back-in-time" color={Colors.TITLE} size={36} />
+        <Text style={styles.title}>最近使用</Text>
+      </View>
+
       <ImageList />
-      {/* <TouchableOpacity
-        style={styles.button}
-        activeOpacity={0.9}
-        onPress={() => {
-          navigation.navigate('Upload');
-        }}>
-        <Entypo name="plus" color={Colors.WHITE} size={36} />
-      </TouchableOpacity> */}
     </View>
   );
 };
@@ -34,11 +27,18 @@ const styles = StyleSheet.create({
     paddingVertical: 36,
     paddingHorizontal: 24,
   },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 24,
+  },
   title: {
-    fontSize: 24,
+    position: 'relative',
+    top: -3,
+    marginLeft: 12,
+    fontSize: 20,
     fontWeight: 'bold',
     color: Colors.TITLE,
-    marginBottom: 12,
   },
   button: {
     position: 'absolute',

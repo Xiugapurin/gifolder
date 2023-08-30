@@ -1,6 +1,5 @@
-import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import {View, Text, StyleSheet} from 'react-native';
 import React, {useState} from 'react';
-import {useNavigation} from '@react-navigation/native';
 import {Icons, Colors} from '../../utils';
 import UploadPage1 from './UploadPage1';
 import UploadPage2 from './UploadPage2';
@@ -8,10 +7,8 @@ import UploadPage2 from './UploadPage2';
 const {Ionicons} = Icons;
 
 const Upload = () => {
-  const navigation = useNavigation();
   const [currentPage, setCurrentPage] = useState(1);
   const [imageURI, setImageURI] = useState('');
-  const [imageTitle, setImageTitle] = useState('');
   const [imageAspectRatio, setImageAspectRatio] = useState(16 / 9);
 
   return (

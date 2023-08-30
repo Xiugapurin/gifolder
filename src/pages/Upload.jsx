@@ -91,8 +91,6 @@ const Upload = () => {
     } else setImageExtension('');
   }, [imageURI]);
 
-  console.log(imageExtension);
-
   const onUploadPress = async () => {
     await uploadImage(imageURI, imageTitle, imageAspectRatio);
     navigation.navigate('Recent');

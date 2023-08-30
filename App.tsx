@@ -6,9 +6,10 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Icons, Colors } from "./src/utils";
 import { Recent, Folder, Upload } from './src/pages';
 import { Text } from 'react-native';
+import Search from './src/pages/Search';
 
 const { PRIMARY, INACTIVE } = Colors;
-const { Entypo } = Icons;
+const { Entypo,Ionicons } = Icons;
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -25,6 +26,9 @@ const MainTab = () => (
           break;
         case "Folder":
           icon = <Entypo name="folder" color={iconColor} size={20} />;
+          break;
+        case "Search":
+          icon = <Ionicons name="search" color={iconColor} size={24} />;
           break;
         case "Upload":
           icon = <Entypo name="upload" color={iconColor} size={20} />;
@@ -46,6 +50,9 @@ const MainTab = () => (
         case "Folder":
           label = <Text style={{color:labelColor, fontSize: 12}}>收藏夾</Text>
           break;
+        case "Search":
+          label = <Text style={{color:labelColor, fontSize: 12}}>搜尋</Text>
+          break;
         case "Upload":
           label = <Text style={{color:labelColor, fontSize: 12}}>新增圖片</Text>
           break;
@@ -60,7 +67,8 @@ const MainTab = () => (
     headerShown: false,
   })}>
     <Tab.Screen name="Recent" component={Recent} options={{unmountOnBlur:true}} />
-    <Tab.Screen name="Folder" component={Folder} />
+    {/* <Tab.Screen name="Folder" component={Folder} /> */}
+    <Tab.Screen name="Search" component={Search} />
     <Tab.Screen name="Upload" component={Upload} options={{unmountOnBlur:true}} />
   </Tab.Navigator>
 )

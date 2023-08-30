@@ -72,6 +72,47 @@ const useFetchImages = () => {
   return {images, isLoading, onRefresh, error};
 };
 
+const useFetchImagesBySearchParam = searchParam => {
+  const [images, setImages] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const onRefresh = () => setIsLoading(true);
+
+  useEffect(() => {
+    const fetchImagesFromDB = () => {
+      db.transaction(tx => {
+        tx.executeSql(
+          'SELECT * FROM Images WHERE title LIKE ? OR uri LIKE ?',
+          [`%${searchParam}%`, `%${searchParam}%`],
+          (tx, results) => {
+            const rows = results.rows;
+            const imagesArray = [];
+
+            for (let i = 0; i < rows.length; i++) {
+              imagesArray.push(rows.item(i));
+            }
+
+            setImages(imagesArray);
+            setIsLoading(false);
+          },
+          error => {
+            console.log('SQL error:', error);
+            setError('取得圖片資料失敗');
+            setIsLoading(false);
+          },
+        );
+      });
+    };
+
+    if (searchParam !== '') {
+      fetchImagesFromDB();
+    }
+  }, [searchParam, isLoading]);
+
+  return {images, isLoading, onRefresh, error};
+};
+
 const useUploadImage = () => {
   const [uploading, setUploading] = useState(false);
   const [complete, setComplete] = useState(false);
@@ -168,4 +209,10 @@ const useDeleteImagesTable = () => {
   return {deleteImagesTable, error};
 };
 
-export {useFetchImages, useUploadImage, useDeleteImage, useDeleteImagesTable};
+export {
+  useFetchImages,
+  useFetchImagesBySearchParam,
+  useUploadImage,
+  useDeleteImage,
+  useDeleteImagesTable,
+};

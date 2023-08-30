@@ -9,15 +9,14 @@ import {
 import {useState} from 'react';
 import FastImage from 'react-native-fast-image';
 import Modal from 'react-native-modal';
+import LottieView from 'lottie-react-native';
 import Clipboard from '@react-native-clipboard/clipboard';
-import {useFetchImages} from '../hooks/useImage';
+import {useFetchImagesBySearchParam} from '../hooks/useImage';
 import {Colors, Icons} from '../utils';
 import CardMenuModal from './modals/CardMenuModal';
 import {useNavigation} from '@react-navigation/native';
 
-// import MasonryList from '@react-native-seoul/masonry-list';
-
-const {Entypo} = Icons;
+const {Ionicons, Entypo} = Icons;
 
 const Card = ({item, i, setActiveItem, toggleModal}) => {
   const onCardPress = async () => {
@@ -56,31 +55,30 @@ const Card = ({item, i, setActiveItem, toggleModal}) => {
   );
 };
 
-const EmptyCard = () => {
-  const navigation = useNavigation();
-
+const EmptyComponent = () => {
   return (
-    <TouchableOpacity
-      style={styles.emptyCard}
-      activeOpacity={0.8}
-      onPress={() => navigation.navigate('Upload')}>
-      <Entypo
-        name="upload"
-        color={Colors.PRIMARY}
-        size={48}
-        style={{marginBottom: 12}}
+    <View
+      style={{
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}>
+      <LottieView
+        style={{width: '100%'}}
+        autoPlay
+        loop
+        source={require('../assets/animations/search_failed.json')}
       />
-      <Text style={styles.emptyCardText}>看起來這裡空空如也...</Text>
-      <Text style={styles.emptyCardText}>點擊這裡來上傳圖片！</Text>
-      {/* <Text style={styles.cardTime}>3分鐘前</Text> */}
-    </TouchableOpacity>
+      <Text style={styles.emptyComponentText}>{'我們找遍了全世界...'}</Text>
+      <Text style={styles.emptyComponentText}>{'試試其他的關鍵字！'}</Text>
+    </View>
   );
 };
 
-const ImageList = () => {
+const SearchImageList = ({searchParam}) => {
   const [isCardMenuModalVisible, setIsCardMenuModalVisible] = useState(false);
   const [activeItem, setActiveItem] = useState(null);
-  const {images, isLoading, onRefresh, error} = useFetchImages();
+  const {images, isLoading, onRefresh, error} =
+    useFetchImagesBySearchParam(searchParam);
 
   if (isLoading) {
     return <Text>讀取中...</Text>;
@@ -117,7 +115,7 @@ const ImageList = () => {
         keyExtractor={item => item.ID}
         showsVerticalScrollIndicator={false}
         ListHeaderComponent={<View />}
-        ListEmptyComponent={<EmptyCard />}
+        ListEmptyComponent={<EmptyComponent />}
         ListFooterComponent={<View style={{height: 100}} />}
         contentContainerStyle={{
           alignSelf: 'stretch',
@@ -145,7 +143,7 @@ const ImageList = () => {
   );
 };
 
-export default ImageList;
+export default SearchImageList;
 
 const styles = StyleSheet.create({
   card: {
@@ -173,17 +171,8 @@ const styles = StyleSheet.create({
     paddingTop: 16,
     paddingLeft: 16,
   },
-  emptyCard: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: '100%',
-    aspectRatio: 16 / 9,
-    borderRadius: 4,
-    backgroundColor: Colors.WHITE,
-    elevation: 3,
-  },
-  emptyCardText: {
-    fontSize: 16,
+  emptyComponentText: {
+    fontSize: 18,
     fontWeight: 'bold',
     color: Colors.PARAGRAPH,
     marginVertical: 4,
