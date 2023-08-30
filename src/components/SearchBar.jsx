@@ -17,8 +17,8 @@ const SearchBar = () => {
     <View style={styles.container}>
       <TextInput
         style={styles.input}
-        placeholder="輸入 #標籤 或 名稱"
-        placeholderTextColor={Colors.PARAGRAPH}
+        placeholder="輸入名稱"
+        placeholderTextColor={Colors.INACTIVE}
         value={searchParam}
         onChangeText={setSearchParam}
         maxLength={10}
@@ -50,6 +50,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.GRAY,
     color: Colors.PARAGRAPH,
     borderRadius: 8,
+    elevation: 3,
   },
   button: {
     marginLeft: 16,

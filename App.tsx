@@ -59,9 +59,9 @@ const MainTab = () => (
     tabBarStyle: { height: 64, paddingTop: 6, paddingBottom: 12 },
     headerShown: false,
   })}>
-    <Tab.Screen name="Recent" component={Recent} />
+    <Tab.Screen name="Recent" component={Recent} options={{unmountOnBlur:true}} />
     <Tab.Screen name="Folder" component={Folder} />
-    <Tab.Screen name="Upload" component={Upload} />
+    <Tab.Screen name="Upload" component={Upload} options={{unmountOnBlur:true}} />
   </Tab.Navigator>
 )
 

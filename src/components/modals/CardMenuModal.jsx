@@ -47,7 +47,7 @@ const CardMenuModal = ({toggleModal, activeItem, onRefresh}) => {
             numberOfLines={2}
             ellipsizeMode="tail"
             style={styles.imageTitle}>
-            標題標題標題標題標題標題標題標題標題標題
+            {activeItem?.title}
           </Text>
         </View>
 

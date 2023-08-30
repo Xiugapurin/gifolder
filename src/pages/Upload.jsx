@@ -6,22 +6,39 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import FastImage from 'react-native-fast-image';
 import {useNavigation} from '@react-navigation/native';
 import {Icons, Colors} from '../utils';
-import {useImageUpload} from '../hooks/useImage';
+import {useDeleteImagesTable, useUploadImage} from '../hooks/useImage';
 
 const {Ionicons, Entypo} = Icons;
 
+const ExtensionButton = ({extension, active, onPress}) => {
+  return (
+    <TouchableOpacity
+      style={[styles.extensionButton, active && styles.activeExtensionButton]}
+      onPress={() => onPress(extension)}>
+      <Text
+        style={[
+          styles.extensionButtonText,
+          active && styles.activeExtensionButtonText,
+        ]}>
+        {extension}
+      </Text>
+    </TouchableOpacity>
+  );
+};
+
 const Upload = () => {
   const navigation = useNavigation();
-  const {uploadImage, uploading, complete, error} = useImageUpload();
+  const {uploadImage, uploading, complete, error} = useUploadImage();
+  const {deleteImagesTable} = useDeleteImagesTable();
 
   const [imageURI, setImageURI] = useState('');
-  const [imageName, setImageName] = useState('');
-  const [imageTag, setImageTag] = useState('');
+  const [imageTitle, setImageTitle] = useState('');
   const [imageAspectRatio, setImageAspectRatio] = useState(16 / 9);
+  const [imageExtension, setImageExtension] = useState('');
   const [progress, setProgress] = useState(0);
   const [isImageExist, setIsImageExist] = useState(false);
 
@@ -34,8 +51,51 @@ const Upload = () => {
     else setProgress(calculatedProgress);
   };
 
-  const onUploadPress = () => {
-    uploadImage(imageURI, imageName, imageTag);
+  const handleExtensionPress = extension => {
+    // 檢查 imageURI 是否有值
+    if (imageURI) {
+      // 從 URI 切割出檔名部分
+      const fileName = imageURI.substring(imageURI.lastIndexOf('/') + 1);
+
+      // 判斷是否有附檔名，並根據情況更新 imageURI
+      if (fileName.includes('.')) {
+        const existingExtension = fileName.split('.').pop();
+        const newFileName = fileName.replace(
+          `.${existingExtension}`,
+          `.${extension}`,
+        );
+        setImageURI(imageURI.replace(fileName, newFileName));
+      } else {
+        setImageURI(`${imageURI}.${extension}`);
+      }
+
+      // 更新 imageExtension 狀態
+      setImageExtension(extension);
+    }
+  };
+
+  useEffect(() => {
+    // 檢查 imageURI 是否有值
+    if (imageURI) {
+      // 從 URI 切割出檔名部分
+      const fileName = imageURI.substring(imageURI.lastIndexOf('/') + 1);
+
+      // 判斷是否有附檔名，如果有則提取附檔名
+      let extension = '';
+      if (fileName.includes('.')) {
+        extension = fileName.split('.').pop();
+      }
+
+      // 更新 imageExtension 狀態
+      setImageExtension(extension);
+    } else setImageExtension('');
+  }, [imageURI]);
+
+  console.log(imageExtension);
+
+  const onUploadPress = async () => {
+    await uploadImage(imageURI, imageTitle, imageAspectRatio);
+    navigation.navigate('Recent');
   };
 
   return (
@@ -53,8 +113,8 @@ const Upload = () => {
       </View>
 
       <ScrollView
-        contentContainerStyle={{alignItems: 'center'}}
-        showsVerticalScrollIndicator={false}>
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{alignItems: 'flex-start'}}>
         {imageURI === '' ? (
           <View style={styles.preview}>
             <Text style={styles.previewTitle}>圖片預覽</Text>
@@ -103,6 +163,25 @@ const Upload = () => {
           )}
         </View>
 
+        <View style={styles.extensionButtonRow}>
+          <Text style={styles.extensionButtonRowTitle}>圖片類型</Text>
+          <ExtensionButton
+            extension="gif"
+            active={imageExtension === 'gif'}
+            onPress={handleExtensionPress}
+          />
+          <ExtensionButton
+            extension="png"
+            active={imageExtension === 'png'}
+            onPress={handleExtensionPress}
+          />
+          <ExtensionButton
+            extension="jpg"
+            active={imageExtension === 'jpg'}
+            onPress={handleExtensionPress}
+          />
+        </View>
+
         {isImageExist && (
           <TouchableOpacity
             style={[
@@ -113,11 +192,20 @@ const Upload = () => {
               },
             ]}
             activeOpacity={0.9}
-            onPress={!uploading && onUploadPress}>
+            onPress={uploading ? null : onUploadPress}>
             <Entypo name="plus" color={Colors.WHITE} size={20} />
             <Text style={styles.uploadButtonText}>新增圖片</Text>
           </TouchableOpacity>
         )}
+
+        {/* <TouchableOpacity
+          style={[styles.uploadButton]}
+          activeOpacity={0.9}
+          onPress={deleteImagesTable}>
+          <Text style={[styles.uploadButtonText, {color: Colors.PARAGRAPH}]}>
+            刪除
+          </Text>
+        </TouchableOpacity> */}
 
         <View style={{height: 50}} />
       </ScrollView>
@@ -184,6 +272,7 @@ const styles = StyleSheet.create({
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    marginBottom: 24,
   },
   input: {
     flex: 1,
@@ -198,6 +287,35 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: 12,
   },
+  extensionButtonRow: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  extensionButtonRowTitle: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    color: Colors.PARAGRAPH,
+  },
+  extensionButton: {
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    marginLeft: 8,
+    borderRadius: 4,
+    backgroundColor: Colors.WHITE,
+    elevation: 2,
+  },
+  extensionButtonText: {
+    fontSize: 12,
+    fontWeight: 'bold',
+    color: Colors.PARAGRAPH,
+  },
+  activeExtensionButton: {
+    backgroundColor: Colors.PRIMARY,
+  },
+  activeExtensionButtonText: {
+    color: 'white', // 或其他你希望的樣式變化
+  },
   uploadButton: {
     flexDirection: 'row',
     justifyContent: 'center',
@@ -205,7 +323,8 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     paddingHorizontal: 16,
     marginTop: 48,
-    borderRadius: 8,
+    borderRadius: 4,
+    elevation: 3,
   },
   uploadButtonText: {
     position: 'relative',
