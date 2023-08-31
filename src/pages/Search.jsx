@@ -1,12 +1,11 @@
 import {
-  StyleSheet,
+  View,
   Text,
   TextInput,
+  StyleSheet,
   TouchableOpacity,
-  View,
 } from 'react-native';
 import React, {useState} from 'react';
-import {useNavigation} from '@react-navigation/native';
 import LottieView from 'lottie-react-native';
 
 import {Colors, Icons} from '../utils';
@@ -15,10 +14,7 @@ import SearchImageList from '../components/SearchImageList';
 const {Ionicons} = Icons;
 
 const Search = () => {
-  const navigation = useNavigation();
   const [searchParam, setSearchParam] = useState('');
-
-  const isSearching = searchParam.length > 0;
 
   return (
     <View style={styles.container}>
@@ -34,13 +30,22 @@ const Search = () => {
         <View style={styles.searchBarIcon}>
           <Ionicons
             name="search"
-            color={isSearching ? Colors.PRIMARY : Colors.INACTIVE}
+            color={searchParam ? Colors.PRIMARY : Colors.INACTIVE}
             size={28}
           />
         </View>
+        {searchParam && (
+          <TouchableOpacity
+            style={styles.searchBarCancel}
+            onPress={() => {
+              setSearchParam('');
+            }}>
+            <Ionicons name="close" color={Colors.TITLE} size={18} />
+          </TouchableOpacity>
+        )}
       </View>
 
-      {isSearching ? (
+      {searchParam ? (
         <SearchImageList searchParam={searchParam} />
       ) : (
         <View
@@ -56,7 +61,7 @@ const Search = () => {
           />
           <Text
             style={{fontSize: 18, fontWeight: 'bold', color: Colors.PARAGRAPH}}>
-            在這片土地上搜尋完美的圖片
+            在這裡搜尋完美的圖片
           </Text>
         </View>
       )}
@@ -89,5 +94,9 @@ const styles = StyleSheet.create({
   searchBarIcon: {
     position: 'absolute',
     left: 12,
+  },
+  searchBarCancel: {
+    position: 'absolute',
+    right: 12,
   },
 });

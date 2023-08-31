@@ -12,7 +12,7 @@ const Loading = () => {
         alignItems: 'center',
       }}>
       <LottieView
-        style={{width: '50%'}}
+        style={{width: '40%'}}
         autoPlay
         loop
         source={require('../assets/animations/loading.json')}

@@ -312,7 +312,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.PRIMARY,
   },
   activeExtensionButtonText: {
-    color: 'white', // 或其他你希望的樣式變化
+    color: Colors.WHITE,
   },
   uploadButton: {
     flexDirection: 'row',
@@ -328,7 +328,7 @@ const styles = StyleSheet.create({
     position: 'relative',
     top: -2,
     marginLeft: 4,
-    color: Colors.WHITE,
     fontSize: 16,
+    color: Colors.WHITE,
   },
 });

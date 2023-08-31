@@ -45,7 +45,7 @@ export default Upload;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingVertical: 36,
+    paddingTop: 36,
     paddingHorizontal: 24,
   },
   header: {

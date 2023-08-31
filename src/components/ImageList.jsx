@@ -17,7 +17,7 @@ import {useNavigation} from '@react-navigation/native';
 import Loading from './Loading';
 import Error from './Error';
 
-// import MasonryList from '@react-native-seoul/masonry-list';
+import MasonryList from '@react-native-seoul/masonry-list';
 
 const {Entypo} = Icons;
 

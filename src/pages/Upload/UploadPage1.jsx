@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import FastImage from 'react-native-fast-image';
+import LottieView from 'lottie-react-native';
 import {Icons, Colors} from '../../utils';
 
 const {Ionicons, Entypo} = Icons;
@@ -42,7 +43,7 @@ const UploadPage1 = ({
   const onProgress = e => {
     const loaded = e.nativeEvent.loaded;
     const total = e.nativeEvent.total;
-    const calculatedProgress = ((loaded / total) * 100).toFixed(2);
+    const calculatedProgress = ((loaded / total) * 100).toFixed(1);
 
     if (calculatedProgress < 0) setProgress(0);
     else setProgress(calculatedProgress);
@@ -89,89 +90,111 @@ const UploadPage1 = ({
   }, [imageURI]);
 
   return (
-    <ScrollView
-      showsVerticalScrollIndicator={false}
-      contentContainerStyle={{alignItems: 'flex-start'}}>
-      {imageURI === '' ? (
-        <View style={styles.preview}>
-          <Text style={styles.previewTitle}>圖片預覽</Text>
-          <Text style={styles.previewSubtitle}>
-            {'若圖片網址正確\n你的圖片將在此顯示'}
-          </Text>
-        </View>
-      ) : (
-        <View style={{marginBottom: 24}}>
-          <FastImage
-            style={[styles.previewImage, {aspectRatio: imageAspectRatio}]}
-            source={{uri: imageURI}}
-            onProgress={onProgress}
-            onLoadStart={() => {
-              setImageAspectRatio(16 / 9);
-              setIsImageExist(false);
-            }}
-            onLoad={e => {
-              setImageAspectRatio(e.nativeEvent.width / e.nativeEvent.height);
-              setProgress(0);
-              setIsImageExist(true);
-            }}
-            resizeMode={FastImage.resizeMode.contain}
-          />
-          <View style={[styles.progressBar, {width: `${progress}%`}]} />
-        </View>
-      )}
+    <>
+      {/* 圖片載入進度 */}
+      <FastImage
+        source={{uri: imageURI}}
+        style={{
+          position: 'absolute',
+          left: -100,
+          width: 100,
+          aspectRatio: imageAspectRatio,
+        }}
+        onProgress={onProgress}
+        onLoadStart={() => {
+          setIsImageExist(false);
+        }}
+        onLoad={e => {
+          setIsImageExist(true);
+          setImageAspectRatio(e.nativeEvent.width / e.nativeEvent.height);
+        }}
+        resizeMode={FastImage.resizeMode.stretch}
+      />
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{
+          alignItems: 'flex-start',
+        }}>
+        {imageURI === '' ? (
+          <View style={styles.preview}>
+            <Text style={styles.previewTitle}>圖片預覽</Text>
+            <Text style={styles.previewSubtitle}>
+              {'若圖片網址正確\n你的圖片將在此顯示'}
+            </Text>
+          </View>
+        ) : (
+          <View style={{width: '100%', marginBottom: 24}}>
+            {isImageExist ? (
+              <FastImage
+                style={[styles.previewImage, {aspectRatio: imageAspectRatio}]}
+                source={{uri: imageURI}}
+                resizeMode={FastImage.resizeMode.contain}
+              />
+            ) : (
+              <View style={styles.loadingView}>
+                <LottieView
+                  style={{width: '75%'}}
+                  autoPlay
+                  loop
+                  source={require('../../assets/animations/image_loading.json')}
+                />
+                <Text style={styles.loadingProgress}>{`${progress} %`}</Text>
+              </View>
+            )}
+          </View>
+        )}
 
-      <View style={styles.inputContainer}>
-        <TextInput
-          style={styles.input}
-          value={imageURI}
-          placeholder="輸入圖片網址 ..."
-          placeholderTextColor={Colors.PARAGRAPH}
-          onChangeText={setImageURI}
-        />
-        {/* input 全部刪除按鈕 */}
+        <View style={styles.inputContainer}>
+          <TextInput
+            style={styles.input}
+            value={imageURI}
+            placeholder="輸入圖片網址 ..."
+            placeholderTextColor={Colors.PARAGRAPH}
+            onChangeText={setImageURI}
+          />
+          {/* input 全部刪除按鈕 */}
+          {imageURI.length > 0 && (
+            <TouchableOpacity
+              style={styles.inputClose}
+              onPress={() => {
+                setImageURI('');
+                setIsImageExist(false);
+              }}>
+              <Ionicons name="close" color={Colors.TITLE} size={18} />
+            </TouchableOpacity>
+          )}
+        </View>
+
+        {/* 更換副檔名按鈕 */}
         {imageURI.length > 0 && (
+          <View style={styles.extensionButtonRow}>
+            <Text style={styles.extensionButtonRowTitle}>圖片類型</Text>
+            {['gif', 'png', 'jpg'].map((extension, i) => (
+              <ExtensionButton
+                key={`${extension}-${i.toString()}`}
+                extension={extension}
+                active={imageExtension === extension}
+                onPress={handleExtensionPress}
+              />
+            ))}
+          </View>
+        )}
+
+        {isImageExist && (
           <TouchableOpacity
-            style={styles.inputClose}
-            onPress={() => {
-              setImageURI('');
-              setIsImageExist(false);
-            }}>
-            <Ionicons name="close" color={Colors.TITLE} size={18} />
+            style={styles.nextButton}
+            activeOpacity={0.9}
+            onPress={toNext}>
+            <Text style={styles.nextButtonText}>下一步</Text>
+            <Entypo
+              name="chevron-small-right"
+              color={Colors.PARAGRAPH}
+              size={24}
+            />
           </TouchableOpacity>
         )}
-      </View>
-
-      {/* 更換副檔名按鈕 */}
-      {imageURI.length > 0 && (
-        <View style={styles.extensionButtonRow}>
-          <Text style={styles.extensionButtonRowTitle}>圖片類型</Text>
-          {['gif', 'png', 'jpg'].map((extension, i) => (
-            <ExtensionButton
-              key={`${extension}-${i.toString()}`}
-              extension={extension}
-              active={imageExtension === extension}
-              onPress={handleExtensionPress}
-            />
-          ))}
-        </View>
-      )}
-
-      {isImageExist && (
-        <TouchableOpacity
-          style={styles.nextButton}
-          activeOpacity={0.9}
-          onPress={toNext}>
-          <Text style={styles.nextButtonText}>下一步</Text>
-          <Entypo
-            name="chevron-small-right"
-            color={Colors.PARAGRAPH}
-            size={24}
-          />
-        </TouchableOpacity>
-      )}
-
-      <View style={{height: 50}} />
-    </ScrollView>
+      </ScrollView>
+    </>
   );
 };
 
@@ -201,7 +224,18 @@ const styles = StyleSheet.create({
   previewImage: {
     width: '100%',
     borderRadius: 8,
-    backgroundColor: Colors.WHITE,
+  },
+  loadingView: {
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loadingProgress: {
+    position: 'relative',
+    top: -50,
+    fontSize: 24,
+    fontFamily: 'sans-serif-condensed',
+    color: Colors.PARAGRAPH,
   },
   progressBar: {
     position: 'relative',
@@ -254,7 +288,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.PRIMARY,
   },
   activeExtensionButtonText: {
-    color: 'white', // 或其他你希望的樣式變化
+    color: Colors.WHITE,
   },
   nextButton: {
     flexDirection: 'row',
@@ -263,7 +297,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     padding: 8,
     paddingLeft: 16,
-    marginTop: 48,
+    marginVertical: 48,
     borderRadius: 4,
     backgroundColor: Colors.WHITE,
     elevation: 3,
@@ -272,8 +306,8 @@ const styles = StyleSheet.create({
     position: 'relative',
     top: -2,
     marginLeft: 4,
-    color: Colors.PARAGRAPH,
     fontSize: 16,
     fontWeight: 'bold',
+    color: Colors.PARAGRAPH,
   },
 });

@@ -103,6 +103,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     marginBottom: 8,
+    color: Colors.PARAGRAPH,
   },
   inputContainer: {
     flexDirection: 'row',
