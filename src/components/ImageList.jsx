@@ -1,7 +1,6 @@
 import {
   Text,
   View,
-  FlatList,
   StyleSheet,
   RefreshControl,
   TouchableOpacity,
@@ -11,7 +10,7 @@ import FastImage from 'react-native-fast-image';
 import Modal from 'react-native-modal';
 import Clipboard from '@react-native-clipboard/clipboard';
 import {MasonryFlashList} from '@shopify/flash-list';
-import {useFetchImages, useFetchImagesBySearchParam} from '../hooks/useImage';
+import {useFetchImages} from '../hooks/useImage';
 import {Colors, DeviceSize, Icons} from '../utils';
 import CardMenuModal from './modals/CardMenuModal';
 import {useNavigation} from '@react-navigation/native';
@@ -78,10 +77,14 @@ const EmptyCard = () => {
   );
 };
 
-const ImageList = ({searchParam}) => {
+const ImageList = ({searchParam, orderBy, order}) => {
   const [isCardMenuModalVisible, setIsCardMenuModalVisible] = useState(false);
   const [activeItem, setActiveItem] = useState(null);
-  const {images, isLoading, onRefresh, error} = useFetchImages(searchParam);
+  const {images, isLoading, onRefresh, error} = useFetchImages(
+    searchParam,
+    orderBy,
+    order,
+  );
 
   if (isLoading) {
     return <Loading />;

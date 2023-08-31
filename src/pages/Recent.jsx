@@ -1,21 +1,57 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 import React, {useState} from 'react';
+import Modal from 'react-native-modal';
 
 import {Colors, Icons} from '../utils';
 import {SearchBar, ImageList} from '../components';
+import OrderModal from '../components/modals/OrderModal';
 
-const {Entypo} = Icons;
+const {Ionicons} = Icons;
 
 const Recent = () => {
   const [searchParam, setSearchParam] = useState('');
+  const [orderBy, setOrderBy] = useState('upload_time');
+  const [order, setOrder] = useState('DESC');
+  const [isOrderModalVisible, setIsOrderModalVisible] = useState(false);
+
+  const toggleModal = () => {
+    setIsOrderModalVisible(!isOrderModalVisible);
+  };
 
   return (
     <View style={styles.container}>
+      <Modal
+        isVisible={isOrderModalVisible}
+        animationIn={'zoomIn'}
+        animationOInTiming={100}
+        animationOut={'zoomOut'}
+        animationOutTiming={300}
+        onBackdropPress={toggleModal}
+        onBackButtonPress={toggleModal}
+        useNativeDriver={true}
+        backdropOpacity={0.5}>
+        <OrderModal
+          toggleModal={toggleModal}
+          orderBy={orderBy}
+          setOrderBy={setOrderBy}
+          order={order}
+          setOrder={setOrder}
+        />
+      </Modal>
       <SearchBar searchParam={searchParam} setSearchParam={setSearchParam} />
 
-      <Text style={styles.title}>{searchParam ? '搜尋結果' : '最近使用'}</Text>
+      <View style={styles.header}>
+        <Text style={styles.title}>
+          {searchParam ? '搜尋結果' : '我的圖庫'}
+        </Text>
 
-      <ImageList searchParam={searchParam} />
+        <TouchableOpacity style={styles.filterButton} onPress={toggleModal}>
+          <Ionicons name="filter" size={24} color={Colors.TITLE} />
+          <Text style={styles.filterButtonText}>排序依據</Text>
+        </TouchableOpacity>
+      </View>
+
+      <ImageList searchParam={searchParam} orderBy={orderBy} order={order} />
     </View>
   );
 };
@@ -27,18 +63,29 @@ const styles = StyleSheet.create({
     paddingVertical: 36,
     paddingHorizontal: 24,
   },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
   title: {
     marginBottom: 12,
     fontSize: 20,
     fontWeight: 'bold',
     color: Colors.TITLE,
   },
-  button: {
-    position: 'absolute',
-    bottom: 180,
-    right: 24,
-    padding: 16,
-    borderRadius: 200,
-    backgroundColor: Colors.SECONDARY,
+  filterButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 4,
+    paddingHorizontal: 8,
+    borderRadius: 4,
+  },
+  filterButtonText: {
+    position: 'relative',
+    top: -2,
+    marginLeft: 4,
+    fontSize: 14,
+    color: Colors.INACTIVE,
   },
 });

@@ -33,7 +33,11 @@ const createTable = () => {
   });
 };
 
-const useFetchImages = searchParam => {
+const useFetchImages = (
+  searchParam,
+  orderBy = 'upload_time',
+  order = 'DESC',
+) => {
   const [images, setImages] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -42,9 +46,11 @@ const useFetchImages = searchParam => {
 
   useEffect(() => {
     const fetchImagesFromDB = () => {
+      const orderByClause = `ORDER BY ${orderBy} ${order}`;
+
       db.transaction(tx => {
         tx.executeSql(
-          'SELECT * FROM Images WHERE title LIKE ? OR uri LIKE ?',
+          `SELECT * FROM Images WHERE title LIKE ? OR uri LIKE ? ${orderByClause}`,
           [`%${searchParam}%`, `%${searchParam}%`],
           (tx, results) => {
             const rows = results.rows;
@@ -67,7 +73,7 @@ const useFetchImages = searchParam => {
     };
 
     fetchImagesFromDB();
-  }, [searchParam, isLoading]);
+  }, [searchParam, orderBy, order, isLoading]);
 
   return {images, isLoading, onRefresh, error};
 };
