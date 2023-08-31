@@ -15,11 +15,8 @@ const Loading = () => {
         style={{width: '40%'}}
         autoPlay
         loop
-        source={require('../assets/animations/loading.json')}
+        source={require('../assets/animations/image_loading.json')}
       />
-      <Text style={{fontSize: 18, fontWeight: 'bold', color: Colors.PARAGRAPH}}>
-        載入中 ...
-      </Text>
     </View>
   );
 };

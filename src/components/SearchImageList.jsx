@@ -11,8 +11,9 @@ import FastImage from 'react-native-fast-image';
 import Modal from 'react-native-modal';
 import LottieView from 'lottie-react-native';
 import Clipboard from '@react-native-clipboard/clipboard';
+import {MasonryFlashList} from '@shopify/flash-list';
 import {useFetchImagesBySearchParam} from '../hooks/useImage';
-import {Colors} from '../utils';
+import {Colors, DeviceSize} from '../utils';
 import CardMenuModal from './modals/CardMenuModal';
 import Loading from './Loading';
 import Error from './Error';
@@ -92,7 +93,7 @@ const SearchImageList = ({searchParam}) => {
   };
 
   return (
-    <>
+    <View style={{height: DeviceSize.DeviceHeight, width: '100%'}}>
       <Modal
         isVisible={isCardMenuModalVisible}
         animationIn={'zoomIn'}
@@ -111,15 +112,11 @@ const SearchImageList = ({searchParam}) => {
       </Modal>
 
       <Text style={styles.title}>搜尋結果</Text>
-      <FlatList
-        keyExtractor={item => item.ID}
+      <MasonryFlashList
         showsVerticalScrollIndicator={false}
         ListHeaderComponent={<View />}
         ListEmptyComponent={<EmptyComponent />}
-        ListFooterComponent={<View style={{height: 100}} />}
-        contentContainerStyle={{
-          alignSelf: 'stretch',
-        }}
+        ListFooterComponent={<View style={{height: 200}} />}
         refreshControl={
           <RefreshControl
             refreshing={isLoading}
@@ -128,6 +125,7 @@ const SearchImageList = ({searchParam}) => {
           />
         }
         onEndReached={() => console.log('onEndReached')}
+        estimatedItemSize={100}
         numColumns={2}
         data={images}
         renderItem={({item, index}) => (
@@ -139,7 +137,7 @@ const SearchImageList = ({searchParam}) => {
           />
         )}
       />
-    </>
+    </View>
   );
 };
 

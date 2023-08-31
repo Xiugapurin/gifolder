@@ -10,14 +10,13 @@ import {useState} from 'react';
 import FastImage from 'react-native-fast-image';
 import Modal from 'react-native-modal';
 import Clipboard from '@react-native-clipboard/clipboard';
+import {MasonryFlashList} from '@shopify/flash-list';
 import {useFetchImages} from '../hooks/useImage';
-import {Colors, Icons} from '../utils';
+import {Colors, DeviceSize, Icons} from '../utils';
 import CardMenuModal from './modals/CardMenuModal';
 import {useNavigation} from '@react-navigation/native';
 import Loading from './Loading';
 import Error from './Error';
-
-import MasonryList from '@react-native-seoul/masonry-list';
 
 const {Entypo} = Icons;
 
@@ -48,12 +47,12 @@ const Card = ({item, i, setActiveItem, toggleModal}) => {
         }}
         resizeMode={FastImage.resizeMode.contain}
       />
-      <View style={{padding: 8, paddingBottom: 12}}>
+      {/* <View style={{padding: 8, paddingBottom: 12}}>
         <Text numberOfLines={2} ellipsizeMode="tail" style={styles.cardTitle}>
           {item.title}
         </Text>
         <Text style={styles.cardTime}>3分鐘前</Text>
-      </View>
+      </View> */}
     </TouchableOpacity>
   );
 };
@@ -97,7 +96,7 @@ const ImageList = () => {
   };
 
   return (
-    <>
+    <View style={{height: DeviceSize.DeviceHeight, width: '100%'}}>
       <Modal
         isVisible={isCardMenuModalVisible}
         animationIn={'zoomIn'}
@@ -115,15 +114,11 @@ const ImageList = () => {
         />
       </Modal>
 
-      <FlatList
-        keyExtractor={item => item.ID}
+      <MasonryFlashList
         showsVerticalScrollIndicator={false}
         ListHeaderComponent={<View />}
         ListEmptyComponent={<EmptyCard />}
-        ListFooterComponent={<View style={{height: 100}} />}
-        contentContainerStyle={{
-          alignSelf: 'stretch',
-        }}
+        ListFooterComponent={<View style={{height: 200}} />}
         refreshControl={
           <RefreshControl
             refreshing={isLoading}
@@ -132,6 +127,7 @@ const ImageList = () => {
           />
         }
         onEndReached={() => console.log('onEndReached')}
+        estimatedItemSize={200}
         numColumns={2}
         data={images}
         renderItem={({item, index}) => (
@@ -143,7 +139,7 @@ const ImageList = () => {
           />
         )}
       />
-    </>
+    </View>
   );
 };
 

@@ -50,12 +50,9 @@ const UploadPage1 = ({
   };
 
   const handleExtensionPress = extension => {
-    // 檢查 imageURI 是否有值
     if (imageURI) {
-      // 從 URI 切割出檔名部分
       const fileName = imageURI.substring(imageURI.lastIndexOf('/') + 1);
 
-      // 判斷是否有附檔名，並根據情況更新 imageURI
       if (fileName.includes('.')) {
         const existingExtension = fileName.split('.').pop();
         const newFileName = fileName.replace(
@@ -67,7 +64,6 @@ const UploadPage1 = ({
         setImageURI(`${imageURI}.${extension}`);
       }
 
-      // 更新 imageExtension 狀態
       setImageExtension(extension);
     }
   };

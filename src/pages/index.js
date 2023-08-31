@@ -1,5 +1,5 @@
 import Recent from './Recent';
-import Folder from './Folder';
+import Search from './Search';
 import Upload from './Upload/Upload';
 
-export {Recent, Folder, Upload};
+export {Recent, Search, Upload};
