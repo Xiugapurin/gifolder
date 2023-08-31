@@ -1,11 +1,5 @@
-import {
-  StyleSheet,
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-} from 'react-native';
-import React, {useState} from 'react';
+import {StyleSheet, View, TextInput, TouchableOpacity} from 'react-native';
+import React from 'react';
 import {Colors, Icons} from '../utils';
 
 const {Ionicons} = Icons;
@@ -15,20 +9,28 @@ const SearchBar = ({searchParam, setSearchParam}) => {
     <View style={styles.container}>
       <TextInput
         style={styles.input}
-        placeholder="輸入名稱"
+        placeholder="輸入關鍵字"
         placeholderTextColor={Colors.INACTIVE}
         value={searchParam}
         onChangeText={setSearchParam}
         maxLength={10}
       />
-
-      <TouchableOpacity style={styles.button}>
+      <View style={styles.icon}>
         <Ionicons
           name="search"
-          color={searchParam.length > 0 ? Colors.PRIMARY : Colors.INACTIVE}
-          size={28}
+          color={searchParam ? Colors.PRIMARY : Colors.INACTIVE}
+          size={24}
         />
-      </TouchableOpacity>
+      </View>
+      {searchParam && (
+        <TouchableOpacity
+          style={styles.cancel}
+          onPress={() => {
+            setSearchParam('');
+          }}>
+          <Ionicons name="close" color={Colors.TITLE} size={18} />
+        </TouchableOpacity>
+      )}
     </View>
   );
 };
@@ -44,15 +46,18 @@ const styles = StyleSheet.create({
   },
   input: {
     flex: 1,
-    paddingHorizontal: 12,
+    paddingLeft: 48,
     backgroundColor: Colors.GRAY,
     color: Colors.PARAGRAPH,
     borderRadius: 8,
     elevation: 3,
   },
-  button: {
-    marginLeft: 16,
-    justifyContent: 'center',
-    alignItems: 'center',
+  icon: {
+    position: 'absolute',
+    left: 12,
+  },
+  cancel: {
+    position: 'absolute',
+    right: 12,
   },
 });

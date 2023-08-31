@@ -11,7 +11,7 @@ import FastImage from 'react-native-fast-image';
 import Modal from 'react-native-modal';
 import Clipboard from '@react-native-clipboard/clipboard';
 import {MasonryFlashList} from '@shopify/flash-list';
-import {useFetchImages} from '../hooks/useImage';
+import {useFetchImages, useFetchImagesBySearchParam} from '../hooks/useImage';
 import {Colors, DeviceSize, Icons} from '../utils';
 import CardMenuModal from './modals/CardMenuModal';
 import {useNavigation} from '@react-navigation/native';
@@ -78,10 +78,10 @@ const EmptyCard = () => {
   );
 };
 
-const ImageList = () => {
+const ImageList = ({searchParam}) => {
   const [isCardMenuModalVisible, setIsCardMenuModalVisible] = useState(false);
   const [activeItem, setActiveItem] = useState(null);
-  const {images, isLoading, onRefresh, error} = useFetchImages();
+  const {images, isLoading, onRefresh, error} = useFetchImages(searchParam);
 
   if (isLoading) {
     return <Loading />;
@@ -118,7 +118,7 @@ const ImageList = () => {
         showsVerticalScrollIndicator={false}
         ListHeaderComponent={<View />}
         ListEmptyComponent={<EmptyCard />}
-        ListFooterComponent={<View style={{height: 200}} />}
+        ListFooterComponent={<View style={{height: 300}} />}
         refreshControl={
           <RefreshControl
             refreshing={isLoading}

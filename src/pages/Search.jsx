@@ -10,6 +10,7 @@ import LottieView from 'lottie-react-native';
 
 import {Colors, Icons} from '../utils';
 import SearchImageList from '../components/SearchImageList';
+import {SearchBar} from '../components';
 
 const {Ionicons} = Icons;
 
@@ -18,32 +19,7 @@ const Search = () => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.searchBarContainer}>
-        <TextInput
-          style={styles.searchBarInput}
-          placeholder="輸入關鍵字"
-          placeholderTextColor={Colors.INACTIVE}
-          value={searchParam}
-          onChangeText={setSearchParam}
-          maxLength={10}
-        />
-        <View style={styles.searchBarIcon}>
-          <Ionicons
-            name="search"
-            color={searchParam ? Colors.PRIMARY : Colors.INACTIVE}
-            size={28}
-          />
-        </View>
-        {searchParam && (
-          <TouchableOpacity
-            style={styles.searchBarCancel}
-            onPress={() => {
-              setSearchParam('');
-            }}>
-            <Ionicons name="close" color={Colors.TITLE} size={18} />
-          </TouchableOpacity>
-        )}
-      </View>
+      <SearchBar searchParam={searchParam} setSearchParam={setSearchParam} />
 
       {searchParam ? (
         <SearchImageList searchParam={searchParam} />

@@ -33,7 +33,7 @@ const createTable = () => {
   });
 };
 
-const useFetchImages = () => {
+const useFetchImages = searchParam => {
   const [images, setImages] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -44,8 +44,8 @@ const useFetchImages = () => {
     const fetchImagesFromDB = () => {
       db.transaction(tx => {
         tx.executeSql(
-          'SELECT * FROM Images',
-          [],
+          'SELECT * FROM Images WHERE title LIKE ? OR uri LIKE ?',
+          [`%${searchParam}%`, `%${searchParam}%`],
           (tx, results) => {
             const rows = results.rows;
             const imagesArray = [];
@@ -67,7 +67,7 @@ const useFetchImages = () => {
     };
 
     fetchImagesFromDB();
-  }, [isLoading]);
+  }, [searchParam, isLoading]);
 
   return {images, isLoading, onRefresh, error};
 };
@@ -105,9 +105,7 @@ const useFetchImagesBySearchParam = searchParam => {
       });
     };
 
-    if (searchParam !== '') {
-      fetchImagesFromDB();
-    }
+    fetchImagesFromDB();
   }, [searchParam, isLoading]);
 
   return {images, isLoading, onRefresh, error};
