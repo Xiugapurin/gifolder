@@ -4,68 +4,51 @@ import {Colors, Icons} from '../../utils';
 
 const {Ionicons} = Icons;
 
-const orderOptions = [
-  {label: '最新', value: 'DESC'},
-  {label: '最早', value: 'ASC'},
-  {label: 'A-Z', value: 'ASC'},
-  {label: 'Z-A', value: 'DESC'},
-];
-
 const orderByOptions = [
-  {label: '上傳時間', value: 'upload_time'},
-  {label: '圖片名稱', value: 'title'},
+  {
+    label: '上傳時間',
+    value: 'upload_time',
+    orderOptions: [
+      {label: '最新', value: 'DESC'},
+      {label: '最早', value: 'ASC'},
+    ],
+  },
+  {
+    label: '圖片名稱',
+    value: 'title',
+    orderOptions: [
+      {label: 'A-Z', value: 'ASC'},
+      {label: 'Z-A', value: 'DESC'},
+    ],
+  },
 ];
 
 const OrderModal = ({toggleModal, orderBy, setOrderBy, order, setOrder}) => {
-  const [orderByLabel, setOrderByLabel] = useState(
-    orderByOptions.find(option => option.value === orderBy).label,
+  const [orderByOptionIndex, setOrderByOptionIndex] = useState(
+    orderByOptions.findIndex(option => option.value === orderBy),
   );
-  const [orderLabel, setOrderLabel] = useState(
-    orderOptions.find(option => option.value === order).label,
+  const [orderOptionIndex, setOrderOptionIndex] = useState(
+    orderByOptions[orderByOptionIndex % 2].orderOptions.findIndex(
+      option => option.value === order,
+    ),
   );
+
+  const currentOrderBy = orderByOptions[orderByOptionIndex % 2];
+  const currentOrder =
+    orderByOptions[orderByOptionIndex % 2].orderOptions[orderOptionIndex % 2];
 
   const toggleOrderBy = () => {
-    setOrderByLabel(prev => {
-      let label = '';
-
-      if (prev === '上傳時間') {
-        label = '圖片名稱';
-        setOrderLabel('A-Z');
-      } else if (prev === '圖片名稱') {
-        label = '上傳時間';
-        setOrderLabel('最新');
-      }
-
-      return label;
-    });
+    setOrderByOptionIndex(prev => prev + 1);
+    setOrderOptionIndex(0);
   };
 
   const toggleOrder = () => {
-    setOrderLabel(prev => {
-      let label = '';
-
-      if (orderByLabel === '上傳時間') {
-        if (prev === '最早') label = '最新';
-        else label = '最早';
-      } else if (orderByLabel === '圖片名稱') {
-        if (prev === 'A-Z') label = 'Z-A';
-        else label = 'A-Z';
-      }
-
-      return label;
-    });
+    setOrderOptionIndex(prev => prev + 1);
   };
 
   const onApply = () => {
-    if (orderByLabel === '上傳時間') {
-      setOrderBy('upload_time');
-      if (orderLabel === '最早') setOrder('ASC');
-      else setOrder('DESC');
-    } else if (orderByLabel === '圖片名稱') {
-      setOrderBy('title');
-      if (orderLabel === 'A-Z') setOrder('ASC');
-      else setOrder('DESC');
-    }
+    setOrderBy(currentOrderBy.value);
+    setOrder(currentOrder.value);
 
     toggleModal();
   };
@@ -91,14 +74,16 @@ const OrderModal = ({toggleModal, orderBy, setOrderBy, order, setOrder}) => {
             <TouchableOpacity
               style={styles.filterButton}
               onPress={toggleOrderBy}>
-              <Text style={styles.filterButtonText}>{orderByLabel}</Text>
+              <Text style={styles.filterButtonText}>
+                {currentOrderBy.label}
+              </Text>
             </TouchableOpacity>
           </View>
           <View style={styles.filterButtonRow}>
             {/* OrderButton */}
             <Text style={styles.filterButtonRowTitle}>順序</Text>
             <TouchableOpacity style={styles.filterButton} onPress={toggleOrder}>
-              <Text style={styles.filterButtonText}>{orderLabel}</Text>
+              <Text style={styles.filterButtonText}>{currentOrder.label}</Text>
             </TouchableOpacity>
           </View>
         </View>
