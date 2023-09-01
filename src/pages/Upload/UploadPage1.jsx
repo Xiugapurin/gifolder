@@ -10,6 +10,8 @@ import React, {useEffect, useState} from 'react';
 import FastImage from 'react-native-fast-image';
 import LottieView from 'lottie-react-native';
 import {Icons, Colors} from '../../utils';
+import UploadByLink from './UploadByLink';
+import UploadByImgur from './UploadByImgur';
 
 const {Ionicons, Entypo} = Icons;
 
@@ -36,7 +38,6 @@ const UploadPage1 = ({
   imageAspectRatio,
   setImageAspectRatio,
 }) => {
-  const [imageExtension, setImageExtension] = useState('');
   const [progress, setProgress] = useState(0);
   const [isImageExist, setIsImageExist] = useState(false);
 
@@ -48,42 +49,6 @@ const UploadPage1 = ({
     if (calculatedProgress < 0) setProgress(0);
     else setProgress(calculatedProgress);
   };
-
-  const handleExtensionPress = extension => {
-    if (imageURI) {
-      const fileName = imageURI.substring(imageURI.lastIndexOf('/') + 1);
-
-      if (fileName.includes('.')) {
-        const existingExtension = fileName.split('.').pop();
-        const newFileName = fileName.replace(
-          `.${existingExtension}`,
-          `.${extension}`,
-        );
-        setImageURI(imageURI.replace(fileName, newFileName));
-      } else {
-        setImageURI(`${imageURI}.${extension}`);
-      }
-
-      setImageExtension(extension);
-    }
-  };
-
-  useEffect(() => {
-    // 檢查 imageURI 是否有值
-    if (imageURI) {
-      // 從 URI 切割出檔名部分
-      const fileName = imageURI.substring(imageURI.lastIndexOf('/') + 1);
-
-      // 判斷是否有附檔名，如果有則提取附檔名
-      let extension = '';
-      if (fileName.includes('.')) {
-        extension = fileName.split('.').pop();
-      }
-
-      // 更新 imageExtension 狀態
-      setImageExtension(extension);
-    } else setImageExtension('');
-  }, [imageURI]);
 
   return (
     <>
@@ -140,40 +105,14 @@ const UploadPage1 = ({
           </View>
         )}
 
-        <View style={styles.inputContainer}>
-          <TextInput
-            style={styles.input}
-            value={imageURI}
-            placeholder="輸入圖片網址 ..."
-            placeholderTextColor={Colors.PARAGRAPH}
-            onChangeText={setImageURI}
+        {false ? (
+          <UploadByLink
+            imageURI={imageURI}
+            setImageURI={setImageURI}
+            setIsImageExist={setIsImageExist}
           />
-          {/* input 全部刪除按鈕 */}
-          {imageURI.length > 0 && (
-            <TouchableOpacity
-              style={styles.inputClose}
-              onPress={() => {
-                setImageURI('');
-                setIsImageExist(false);
-              }}>
-              <Ionicons name="close" color={Colors.TITLE} size={18} />
-            </TouchableOpacity>
-          )}
-        </View>
-
-        {/* 更換副檔名按鈕 */}
-        {imageURI.length > 0 && (
-          <View style={styles.extensionButtonRow}>
-            <Text style={styles.extensionButtonRowTitle}>圖片類型</Text>
-            {['gif', 'png', 'jpg'].map((extension, i) => (
-              <ExtensionButton
-                key={`${extension}-${i.toString()}`}
-                extension={extension}
-                active={imageExtension === extension}
-                onPress={handleExtensionPress}
-              />
-            ))}
-          </View>
+        ) : (
+          <UploadByImgur imageURI={imageURI} setImageURI={setImageURI} />
         )}
 
         {isImageExist && (

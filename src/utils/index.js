@@ -5,7 +5,7 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 export const Colors = {
-  PRIMARY: '#73AAFC',
+  PRIMARY: '#3F80E3',
   SECONDARY: '#A7ACED',
   TITLE: '#4C5178',
   PARAGRAPH: '#4F4F4F',
