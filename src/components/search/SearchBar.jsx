@@ -1,27 +1,33 @@
 import {StyleSheet, View, TextInput, TouchableOpacity} from 'react-native';
-import React from 'react';
+import React, {useState} from 'react';
 import {Colors, Icons} from '../../utils';
 
 const {Ionicons} = Icons;
 
-const SearchBar = ({searchParam, setSearchParam}) => {
+const SearchBar = ({fetchImage, searchParam, setSearchParam}) => {
+  const onSearch = () => {
+    fetchImage(searchParam);
+  };
+
   return (
     <View style={styles.container}>
       <TextInput
         style={styles.input}
-        placeholder="在圖庫中尋找"
+        placeholder="輸入關鍵字"
         placeholderTextColor={Colors.INACTIVE}
         value={searchParam}
         onChangeText={setSearchParam}
-        maxLength={10}
+        maxLength={50}
       />
-      <View style={styles.icon}>
+      <TouchableOpacity
+        style={styles.icon}
+        onPress={searchParam ? onSearch : null}>
         <Ionicons
           name="search"
           color={searchParam ? Colors.PRIMARY : Colors.INACTIVE}
           size={24}
         />
-      </View>
+      </TouchableOpacity>
       {searchParam && (
         <TouchableOpacity
           style={styles.cancel}
@@ -46,7 +52,8 @@ const styles = StyleSheet.create({
   },
   input: {
     flex: 1,
-    paddingLeft: 48,
+    paddingRight: 72,
+    paddingLeft: 12,
     backgroundColor: Colors.GRAY,
     color: Colors.PARAGRAPH,
     borderRadius: 8,
@@ -54,10 +61,10 @@ const styles = StyleSheet.create({
   },
   icon: {
     position: 'absolute',
-    left: 12,
+    right: 12,
   },
   cancel: {
     position: 'absolute',
-    right: 12,
+    right: 48,
   },
 });

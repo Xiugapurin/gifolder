@@ -58,19 +58,16 @@ const useFetchSearchImage = () => {
     setIsLoading(true);
 
     try {
-      // 使用 fetch 執行 API 請求
       const response = await fetch(
-        `${TENOR_API_BASE_URL}?q=${searchParam}&key=${TENOR_API_KEY}%client_key=${TENOR_CLIENT_KEY}&media_filter=gif`,
+        `${TENOR_API_BASE_URL}?q=${searchParam}&key=${TENOR_API_KEY}&client_key=${TENOR_CLIENT_KEY}&country=TW&locale=zh-TW&ar_range=standard&media_filter=tinygif&limit=50`,
       );
 
       if (!response.ok) {
         throw new Error('API 請求失敗');
       }
 
-      // 解析 JSON 數據
       const data = await response.json();
 
-      // 從 JSON 數據中獲取圖片結果
       const results = data.results || [];
 
       // 將圖片結果設置到狀態中

@@ -1,28 +1,29 @@
-import {
-  View,
-  Text,
-  TextInput,
-  StyleSheet,
-  TouchableOpacity,
-} from 'react-native';
+import {View, Text, StyleSheet} from 'react-native';
 import React, {useState} from 'react';
 import LottieView from 'lottie-react-native';
-
+import {SearchBar, SearchImageList} from '../components';
+import {useFetchSearchImage} from '../hooks/useOnlineImageRepo';
 import {Colors, Icons} from '../utils';
-import SearchImageList from '../components/SearchImageList';
-import {SearchBar} from '../components';
-
-const {Ionicons} = Icons;
 
 const Search = () => {
   const [searchParam, setSearchParam] = useState('');
+  const {fetchImage, images, isLoading, error} = useFetchSearchImage();
 
   return (
     <View style={styles.container}>
-      <SearchBar searchParam={searchParam} setSearchParam={setSearchParam} />
+      <SearchBar
+        fetchImage={fetchImage}
+        searchParam={searchParam}
+        setSearchParam={setSearchParam}
+      />
 
-      {searchParam ? (
-        <SearchImageList searchParam={searchParam} />
+      {images.length > 0 ? (
+        <SearchImageList
+          fetchImage={fetchImage}
+          images={images}
+          isLoading={isLoading}
+          error={error}
+        />
       ) : (
         <View
           style={{

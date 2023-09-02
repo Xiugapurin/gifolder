@@ -16,6 +16,7 @@ import CardMenuModal from '../modals/CardMenuModal';
 import {useNavigation} from '@react-navigation/native';
 import Loading from '../common/Loading';
 import Error from '../common/Error';
+import Empty from '../common/Empty';
 
 const {Entypo} = Icons;
 
@@ -113,7 +114,7 @@ const ImageList = ({searchParam, orderBy, order}) => {
       <MasonryFlashList
         showsVerticalScrollIndicator={false}
         ListHeaderComponent={<View />}
-        ListEmptyComponent={<EmptyCard />}
+        ListEmptyComponent={searchParam ? <Empty /> : <EmptyCard />}
         ListFooterComponent={<View style={{height: 300}} />}
         refreshControl={
           <RefreshControl

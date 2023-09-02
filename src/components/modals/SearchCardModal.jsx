@@ -1,11 +1,4 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  Share,
-  TouchableOpacity,
-  ToastAndroid,
-} from 'react-native';
+import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 import React from 'react';
 import {Colors, Icons} from '../../utils';
 import FastImage from 'react-native-fast-image';
@@ -13,28 +6,15 @@ import {useDeleteImage} from '../../hooks/useImage';
 
 const {Ionicons} = Icons;
 
-const CardMenuModal = ({toggleModal, activeItem, onRefresh}) => {
+const SearchCardModal = ({toggleModal, activeItem}) => {
   const {deleteImage, error} = useDeleteImage();
 
   const onDeletePress = async () => {
     await deleteImage(activeItem?.ID);
-    onRefresh();
     toggleModal();
   };
 
-  const onShare = async () => {
-    const uri = activeItem?.uri;
-    const message = uri.includes('tenor.com') ? uri.replace('.gif', '') : uri;
-
-    try {
-      const result = await Share.share({
-        message: message,
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
+  console.log(activeItem);
   return (
     <View style={styles.container}>
       <View style={styles.modal}>
@@ -51,21 +31,21 @@ const CardMenuModal = ({toggleModal, activeItem, onRefresh}) => {
         {/* END Header */}
         <View style={styles.content}>
           <FastImage
-            source={{uri: activeItem?.uri}}
+            source={{uri: activeItem?.media_formats.tinygif.url}}
             style={{
               width: '100%',
               aspectRatio: 16 / 9,
-              borderTopRightRadius: 4,
-              borderTopLeftRadius: 4,
+              borderRadius: 4,
               marginBottom: 12,
             }}
             resizeMode={FastImage.resizeMode.contain}
           />
+          {/* <Text style={styles.imageTitle}>{activeItem?.title}</Text> */}
           <Text
             numberOfLines={2}
             ellipsizeMode="tail"
             style={styles.imageTitle}>
-            {activeItem?.title}
+            {activeItem?.content_description}
           </Text>
         </View>
 
@@ -78,9 +58,6 @@ const CardMenuModal = ({toggleModal, activeItem, onRefresh}) => {
               刪除圖片
             </Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.footerButton} onPress={onShare}>
-            <Ionicons name="share-social" size={20} color={Colors.WHITE} />
-          </TouchableOpacity>
           <TouchableOpacity style={styles.footerButton} onPress={toggleModal}>
             <Text style={styles.footerButtonText}>確定</Text>
           </TouchableOpacity>
@@ -90,7 +67,7 @@ const CardMenuModal = ({toggleModal, activeItem, onRefresh}) => {
   );
 };
 
-export default CardMenuModal;
+export default SearchCardModal;
 
 const styles = StyleSheet.create({
   container: {

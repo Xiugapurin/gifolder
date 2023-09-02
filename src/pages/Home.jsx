@@ -3,7 +3,7 @@ import React, {useState} from 'react';
 import Modal from 'react-native-modal';
 
 import {Colors, Icons} from '../utils';
-import {ImageList, SearchBar} from '../components';
+import {ImageList, HomeSearchBar} from '../components';
 import OrderModal from '../components/modals/OrderModal';
 
 const {Ionicons} = Icons;
@@ -38,7 +38,10 @@ const Home = () => {
           setOrder={setOrder}
         />
       </Modal>
-      <SearchBar searchParam={searchParam} setSearchParam={setSearchParam} />
+      <HomeSearchBar
+        searchParam={searchParam}
+        setSearchParam={setSearchParam}
+      />
 
       <View style={styles.header}>
         <Text style={styles.title}>
