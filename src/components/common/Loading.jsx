@@ -1,7 +1,6 @@
 import {StyleSheet, View, Text} from 'react-native';
 import LottieView from 'lottie-react-native';
 import React from 'react';
-import {Colors} from '../utils';
 
 const Loading = () => {
   return (
@@ -15,7 +14,7 @@ const Loading = () => {
         style={{width: '40%'}}
         autoPlay
         loop
-        source={require('../assets/animations/image_loading.json')}
+        source={require('../../assets/animations/image_loading.json')}
       />
     </View>
   );

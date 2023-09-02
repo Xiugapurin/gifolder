@@ -1,6 +1,6 @@
 import {StyleSheet, View, TextInput, TouchableOpacity} from 'react-native';
 import React from 'react';
-import {Colors, Icons} from '../utils';
+import {Colors, Icons} from '../../utils';
 
 const {Ionicons} = Icons;
 

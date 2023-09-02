@@ -15,8 +15,9 @@ import {MasonryFlashList} from '@shopify/flash-list';
 import {useFetchImagesBySearchParam} from '../hooks/useImage';
 import {Colors, DeviceSize} from '../utils';
 import CardMenuModal from './modals/CardMenuModal';
-import Loading from './Loading';
-import Error from './Error';
+import Loading from './common/Loading';
+import Error from './common/Error';
+import {useFetchSearchImage} from '../hooks/useOnlineImageRepo';
 
 const Card = ({item, i, setActiveItem, toggleModal}) => {
   const onCardPress = async () => {
@@ -45,12 +46,6 @@ const Card = ({item, i, setActiveItem, toggleModal}) => {
         }}
         resizeMode={FastImage.resizeMode.contain}
       />
-      <View style={{padding: 8, paddingBottom: 12}}>
-        <Text numberOfLines={2} ellipsizeMode="tail" style={styles.cardTitle}>
-          {item.title}
-        </Text>
-        <Text style={styles.cardTime}>3分鐘前</Text>
-      </View>
     </TouchableOpacity>
   );
 };
@@ -77,8 +72,9 @@ const EmptyComponent = () => {
 const SearchImageList = ({searchParam}) => {
   const [isCardMenuModalVisible, setIsCardMenuModalVisible] = useState(false);
   const [activeItem, setActiveItem] = useState(null);
-  const {images, isLoading, onRefresh, error} =
-    useFetchImagesBySearchParam(searchParam);
+
+  const {fetchImage, images, isLoading, error} =
+    useFetchSearchImage(searchParam);
 
   if (isLoading) {
     return <Loading />;
@@ -103,13 +99,7 @@ const SearchImageList = ({searchParam}) => {
         onBackdropPress={toggleModal}
         onBackButtonPress={toggleModal}
         useNativeDriver={true}
-        backdropOpacity={0.5}>
-        <CardMenuModal
-          toggleModal={toggleModal}
-          activeItem={activeItem}
-          onRefresh={onRefresh}
-        />
-      </Modal>
+        backdropOpacity={0.5}></Modal>
 
       <Text style={styles.title}>搜尋結果</Text>
       <MasonryFlashList

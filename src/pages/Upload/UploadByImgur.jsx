@@ -2,8 +2,8 @@ import {Text, StyleSheet, TouchableOpacity, ToastAndroid} from 'react-native';
 import {launchImageLibrary} from 'react-native-image-picker';
 import React from 'react';
 import {Icons, Colors} from '../../utils';
-import useUploadImage from '../../hooks/useImgur';
 import {uriToBlob} from '../../utils/uriToBlob';
+import {useUploadImage} from '../../hooks/useOnlineImageRepo';
 
 const {Entypo} = Icons;
 
@@ -42,7 +42,7 @@ const UploadByImgur = ({imageURI, setImageURI}) => {
       };
       reader.readAsDataURL(blob);
     } catch (error) {
-      ToastAndroid.show('uploadError', ToastAndroid.SHORT);
+      ToastAndroid.show(uploadError, ToastAndroid.SHORT);
     }
   };
 

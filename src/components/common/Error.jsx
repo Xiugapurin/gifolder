@@ -1,7 +1,7 @@
 import {StyleSheet, View, Text} from 'react-native';
 import LottieView from 'lottie-react-native';
 import React from 'react';
-import {Colors} from '../utils';
+import {Colors} from '../../utils';
 
 const Error = () => {
   return (
@@ -15,7 +15,7 @@ const Error = () => {
         style={{width: '60%'}}
         autoPlay
         loop={false}
-        source={require('../assets/animations/error.json')}
+        source={require('../../assets/animations/error.json')}
       />
       <Text style={{fontSize: 18, fontWeight: 'bold', color: Colors.PARAGRAPH}}>
         似乎發生了錯誤 ...
