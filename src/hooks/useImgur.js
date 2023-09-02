@@ -1,10 +1,12 @@
 import {useState} from 'react';
-import {API_BASE_URL, API_TOKEN} from '@env';
+import {API_BASE_URL, API_TOKEN, CLIENT_ID} from '@env';
 
 const useUploadImage = () => {
+  const [uploading, setUploading] = useState(false);
   const [error, setError] = useState('');
 
   const uploadImage = async imageFile => {
+    setUploading(true);
     try {
       const formData = new FormData();
       formData.append('image', imageFile);
@@ -17,7 +19,6 @@ const useUploadImage = () => {
         body: formData,
       });
 
-      console.log(response.ok);
       if (!response.ok) {
         throw new Error('圖片上傳失敗');
       }
@@ -34,10 +35,12 @@ const useUploadImage = () => {
       // 錯誤處理
       console.error('圖片上傳錯誤:', error);
       setError('圖片上傳時發生錯誤');
+    } finally {
+      setUploading(false);
     }
   };
 
-  return {uploadImage, error};
+  return {uploadImage, uploading, error};
 };
 
 export default useUploadImage;

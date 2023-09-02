@@ -1,13 +1,6 @@
-import {
-  View,
-  Text,
-  TextInput,
-  StyleSheet,
-  TouchableOpacity,
-  ToastAndroid,
-} from 'react-native';
+import {Text, StyleSheet, TouchableOpacity, ToastAndroid} from 'react-native';
 import {launchImageLibrary} from 'react-native-image-picker';
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {Icons, Colors} from '../../utils';
 import useUploadImage from '../../hooks/useImgur';
 import {uriToBlob} from '../../utils/uriToBlob';
@@ -15,14 +8,13 @@ import {uriToBlob} from '../../utils/uriToBlob';
 const {Entypo} = Icons;
 
 const UploadByImgur = ({imageURI, setImageURI}) => {
-  const [imageLocalURI, setImageLocalURI] = useState('');
-  const {uploadImage, error: uploadError} = useUploadImage();
+  const {uploadImage, uploading, error: uploadError} = useUploadImage();
 
   const onSelectButtonPress = async () => {
     const result = await launchImageLibrary({mediaType: 'photo'});
 
     if (result.didCancel) {
-      ToastAndroid.show('取消選取圖片', ToastAndroid.SHORT);
+      ToastAndroid.show('你已取消選取啦', ToastAndroid.SHORT);
       return;
     }
 
@@ -38,17 +30,14 @@ const UploadByImgur = ({imageURI, setImageURI}) => {
       const blob = await uriToBlob(localImageURI);
       const reader = new FileReader();
       reader.onload = () => {
-        const base64String = reader.result.split(',')[1]; // 去掉 data:image/jpeg;base64, 部分
-        // 現在 base64String 包含圖片的 base64 數據
-        // 可以將它用於後續處理，例如上傳到伺服器
-        console.log(base64String);
-        // 在這裡執行上傳操作
+        const base64String = reader.result.split(',')[1];
+
         uploadImage(base64String)
           .then(imgurLink => {
             setImageURI(imgurLink);
           })
-          .catch(error => {
-            ToastAndroid.show('uploadError', ToastAndroid.SHORT);
+          .catch(e => {
+            ToastAndroid.show(uploadError, ToastAndroid.SHORT);
           });
       };
       reader.readAsDataURL(blob);
@@ -59,18 +48,17 @@ const UploadByImgur = ({imageURI, setImageURI}) => {
 
   return (
     <>
-      <TextInput
-        style={styles.input}
-        value={imageURI}
-        placeholder="選取後圖片網址將在此顯示"
-        placeholderTextColor={Colors.PARAGRAPH}
-        editable={false}
-      />
       <TouchableOpacity
         style={styles.selectButton}
-        onPress={onSelectButtonPress}>
-        <Entypo name="folder-images" size={20} color={Colors.PRIMARY} />
-        <Text style={styles.selectButtonText}>選取圖片</Text>
+        onPress={uploading ? null : onSelectButtonPress}>
+        <Entypo name="folder-images" size={20} color={Colors.PARAGRAPH} />
+        <Text style={styles.selectButtonText}>
+          {uploading
+            ? '正在上傳圖片...'
+            : imageURI
+            ? '重新選取圖片'
+            : '點此選取圖片'}
+        </Text>
       </TouchableOpacity>
     </>
   );
@@ -94,19 +82,22 @@ const styles = StyleSheet.create({
     right: 12,
   },
   selectButton: {
+    width: '100%',
     flexDirection: 'row',
+    justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: Colors.WHITE,
-    paddingVertical: 8,
-    paddingHorizontal: 12,
-    borderRadius: 4,
+    padding: 12,
+    marginBottom: 12,
+    borderRadius: 8,
+    elevation: 1,
+    backgroundColor: Colors.GRAY,
   },
   selectButtonText: {
     position: 'relative',
-    top: -3,
-    fontSize: 18,
+    top: -2,
+    fontSize: 16,
     fontWeight: 'bold',
     marginLeft: 8,
-    color: Colors.PRIMARY,
+    color: Colors.PARAGRAPH,
   },
 });

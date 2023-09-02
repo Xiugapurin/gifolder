@@ -1,31 +1,39 @@
 import {
   View,
   Text,
-  TextInput,
   ScrollView,
   StyleSheet,
   TouchableOpacity,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import FastImage from 'react-native-fast-image';
 import LottieView from 'lottie-react-native';
 import {Icons, Colors} from '../../utils';
 import UploadByLink from './UploadByLink';
 import UploadByImgur from './UploadByImgur';
 
-const {Ionicons, Entypo} = Icons;
+const {Entypo} = Icons;
 
-const ExtensionButton = ({extension, active, onPress}) => {
+const UploadMethodButton = ({iconName, title, active, styleProps, onPress}) => {
   return (
     <TouchableOpacity
-      style={[styles.extensionButton, active && styles.activeExtensionButton]}
-      onPress={() => onPress(extension)}>
+      style={[
+        styles.uploadMethodButton,
+        active && styles.uploadMethodButtonActive,
+        styleProps,
+      ]}
+      onPress={onPress}>
+      <Entypo
+        name={iconName}
+        size={18}
+        color={active ? Colors.WHITE : Colors.PRIMARY}
+      />
       <Text
         style={[
-          styles.extensionButtonText,
-          active && styles.activeExtensionButtonText,
+          styles.uploadMethodButtonText,
+          active && styles.uploadMethodButtonTextActive,
         ]}>
-        {extension}
+        {title}
       </Text>
     </TouchableOpacity>
   );
@@ -40,6 +48,7 @@ const UploadPage1 = ({
 }) => {
   const [progress, setProgress] = useState(0);
   const [isImageExist, setIsImageExist] = useState(false);
+  const [uploadMethod, setUploadMethod] = useState('local');
 
   const onProgress = e => {
     const loaded = e.nativeEvent.loaded;
@@ -49,6 +58,27 @@ const UploadPage1 = ({
     if (calculatedProgress < 0) setProgress(0);
     else setProgress(calculatedProgress);
   };
+
+  const uploadMethodButtons = [
+    {
+      title: '使用手機圖片',
+      iconName: 'folder-images',
+      active: uploadMethod === 'local',
+      styleProps: {borderTopLeftRadius: 8, borderBottomLeftRadius: 8},
+      onPress: () => {
+        setUploadMethod('local');
+      },
+    },
+    {
+      title: '使用圖片連結',
+      iconName: 'link',
+      active: uploadMethod === 'link',
+      styleProps: {borderTopRightRadius: 8, borderBottomRightRadius: 8},
+      onPress: () => {
+        setUploadMethod('link');
+      },
+    },
+  ];
 
   return (
     <>
@@ -105,14 +135,30 @@ const UploadPage1 = ({
           </View>
         )}
 
-        {false ? (
+        <View style={styles.uploadMethodContainer}>
+          <Text style={styles.uploadMethodTitle}>選擇上傳方式</Text>
+          <View style={styles.uploadMethodButtonRow}>
+            {uploadMethodButtons.map((button, i) => (
+              <UploadMethodButton
+                key={`upload-method-button-${i.toString()}`}
+                iconName={button.iconName}
+                title={button.title}
+                active={button.active}
+                styleProps={button.styleProps}
+                onPress={button.onPress}
+              />
+            ))}
+          </View>
+        </View>
+
+        {uploadMethod === 'local' ? (
+          <UploadByImgur imageURI={imageURI} setImageURI={setImageURI} />
+        ) : (
           <UploadByLink
             imageURI={imageURI}
             setImageURI={setImageURI}
             setIsImageExist={setIsImageExist}
           />
-        ) : (
-          <UploadByImgur imageURI={imageURI} setImageURI={setImageURI} />
         )}
 
         {isImageExist && (
@@ -172,11 +218,43 @@ const styles = StyleSheet.create({
     fontFamily: 'sans-serif-condensed',
     color: Colors.PARAGRAPH,
   },
-  progressBar: {
-    position: 'relative',
-    bottom: 4,
-    height: 4,
+  uploadMethodContainer: {
+    width: '100%',
+  },
+  uploadMethodTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: Colors.TITLE,
+    marginBottom: 12,
+  },
+  uploadMethodButtonRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 24,
+  },
+  uploadMethodButton: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 8,
+    paddingHorizontal: 24,
+    backgroundColor: Colors.WHITE,
+    elevation: 1,
+  },
+  uploadMethodButtonActive: {
     backgroundColor: Colors.PRIMARY,
+  },
+  uploadMethodButtonText: {
+    position: 'relative',
+    top: -2,
+    marginLeft: 8,
+    fontSize: 14,
+    fontWeight: 'bold',
+    color: Colors.PARAGRAPH,
+  },
+  uploadMethodButtonTextActive: {
+    color: Colors.WHITE,
   },
   inputContainer: {
     flexDirection: 'row',
