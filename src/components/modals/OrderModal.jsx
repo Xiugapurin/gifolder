@@ -100,7 +100,10 @@ const OrderModal = ({toggleModal, orderBy, setOrderBy, order, setOrder}) => {
             </Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.footerButton} onPress={onApply}>
-            <Text style={styles.footerButtonText}>套用設定</Text>
+            <Ionicons name="checkmark-sharp" color={Colors.WHITE} size={20} />
+            <Text style={[styles.footerButtonText, {marginLeft: 4}]}>
+              套用設定
+            </Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -138,6 +141,7 @@ const styles = StyleSheet.create({
   },
   content: {
     marginBottom: 24,
+    alignItems: 'center',
   },
   filterButtonTitle: {
     fontSize: 14,

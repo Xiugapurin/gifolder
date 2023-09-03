@@ -45,6 +45,8 @@ const UploadPage2 = ({toPrev, imageURI, imageAspectRatio}) => {
             placeholder="無標題"
             placeholderTextColor={Colors.PARAGRAPH}
             onChangeText={setImageTitle}
+            maxLength={50}
+            multiline={true}
           />
           {imageTitle.length > 0 && (
             <TouchableOpacity

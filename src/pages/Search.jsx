@@ -3,27 +3,18 @@ import React, {useState} from 'react';
 import LottieView from 'lottie-react-native';
 import {SearchBar, SearchImageList} from '../components';
 import {useFetchSearchImage} from '../hooks/useOnlineImageRepo';
-import {Colors, Icons} from '../utils';
+import {Colors} from '../utils';
 
 const Search = () => {
-  const [searchParam, setSearchParam] = useState('');
+  const [isSearching, setIsSearching] = useState(false);
   const {fetchImage, images, isLoading, error} = useFetchSearchImage();
 
   return (
     <View style={styles.container}>
-      <SearchBar
-        fetchImage={fetchImage}
-        searchParam={searchParam}
-        setSearchParam={setSearchParam}
-      />
+      <SearchBar fetchImage={fetchImage} setIsSearching={setIsSearching} />
 
-      {images.length > 0 ? (
-        <SearchImageList
-          fetchImage={fetchImage}
-          images={images}
-          isLoading={isLoading}
-          error={error}
-        />
+      {isSearching ? (
+        <SearchImageList images={images} isLoading={isLoading} error={error} />
       ) : (
         <View
           style={{

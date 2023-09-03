@@ -4,8 +4,13 @@ import {Colors, Icons} from '../../utils';
 
 const {Ionicons} = Icons;
 
-const SearchBar = ({fetchImage, searchParam, setSearchParam}) => {
+const SearchBar = ({
+  fetchImage,
+  setIsSearching,
+}) => {
+  const [searchParam, setSearchParam] = useState('');
   const onSearch = () => {
+    setIsSearching(true);
     fetchImage(searchParam);
   };
 
@@ -33,6 +38,7 @@ const SearchBar = ({fetchImage, searchParam, setSearchParam}) => {
           style={styles.cancel}
           onPress={() => {
             setSearchParam('');
+            setIsSearching(false);
           }}>
           <Ionicons name="close" color={Colors.TITLE} size={18} />
         </TouchableOpacity>

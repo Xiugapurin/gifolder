@@ -1,23 +1,66 @@
-import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
-import React from 'react';
+import {
+  Text,
+  View,
+  Share,
+  Keyboard,
+  TextInput,
+  StyleSheet,
+  ToastAndroid,
+  TouchableOpacity,
+} from 'react-native';
+import React, {useState} from 'react';
 import {Colors, Icons} from '../../utils';
 import FastImage from 'react-native-fast-image';
-import {useDeleteImage} from '../../hooks/useImage';
+import {useDeleteImage, useUploadImage} from '../../hooks/useImage';
 
-const {Ionicons} = Icons;
+const {Entypo, Ionicons} = Icons;
 
-const SearchCardModal = ({toggleModal, activeItem}) => {
-  const {deleteImage, error} = useDeleteImage();
+const SearchCardModal = ({toggleModal, activeItem, activeItemAspectRatio}) => {
+  const [imageTitle, setImageTitle] = useState(activeItem?.content_description);
+  const [imageTitleLength, setImageTitleLength] = useState(
+    activeItem?.content_description.length,
+  );
+  const [isInputFocus, setIsInputFocus] = useState(false);
+  const {uploadImage, uploading, error} = useUploadImage();
 
-  const onDeletePress = async () => {
-    await deleteImage(activeItem?.ID);
-    toggleModal();
+  const onChangeText = text => {
+    setImageTitle(text);
+    setImageTitleLength(text.length);
   };
 
-  console.log(activeItem);
+  const onShare = async () => {
+    try {
+      const result = await Share.share({
+        message: activeItem?.media_formats.tinygif.url,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const onAddButtonPress = () => {
+    uploadImage(
+      activeItem?.media_formats.tinygif.url,
+      imageTitle,
+      activeItemAspectRatio,
+    )
+      .then(() => {
+        ToastAndroid.show('已成功加入至圖庫！', ToastAndroid.SHORT);
+      })
+      .catch(() => {
+        ToastAndroid.show(error, ToastAndroid.SHORT);
+      })
+      .finally(() => {
+        toggleModal();
+      });
+  };
+
   return (
     <View style={styles.container}>
-      <View style={styles.modal}>
+      <TouchableOpacity
+        style={styles.modal}
+        onPress={Keyboard.dismiss}
+        activeOpacity={1}>
         {/* START Header */}
         <View style={styles.header}>
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
@@ -40,29 +83,45 @@ const SearchCardModal = ({toggleModal, activeItem}) => {
             }}
             resizeMode={FastImage.resizeMode.contain}
           />
-          {/* <Text style={styles.imageTitle}>{activeItem?.title}</Text> */}
+          <Text style={styles.imageTitle}>圖片名稱</Text>
+          <TextInput
+            style={[
+              styles.imageTitleInput,
+              isInputFocus
+                ? {
+                    borderColor: Colors.PRIMARY,
+                    backgroundColor: Colors.WHITE,
+                  }
+                : {borderColor: Colors.GRAY},
+            ]}
+            value={imageTitle}
+            onChangeText={onChangeText}
+            multiline={true}
+            onFocus={() => setIsInputFocus(true)}
+            onBlur={() => setIsInputFocus(false)}
+            maxLength={50}
+          />
           <Text
-            numberOfLines={2}
-            ellipsizeMode="tail"
-            style={styles.imageTitle}>
-            {activeItem?.content_description}
-          </Text>
+            style={styles.imageTitleLength}>{`${imageTitleLength} / 50`}</Text>
         </View>
 
         <View style={styles.footer}>
           <TouchableOpacity
-            style={[styles.footerButton, {backgroundColor: Colors.CANCEL}]}
-            onPress={onDeletePress}>
-            <Ionicons name="trash" size={20} color={Colors.WHITE} />
-            <Text style={[styles.footerButtonText, {marginLeft: 4}]}>
-              刪除圖片
+            style={[styles.footerButton, {backgroundColor: Colors.WHITE}]}
+            onPress={onShare}>
+            <Ionicons name="share-social" size={20} color={Colors.PRIMARY} />
+            <Text style={[styles.footerButtonText, {color: Colors.PRIMARY}]}>
+              分享圖片
             </Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.footerButton} onPress={toggleModal}>
-            <Text style={styles.footerButtonText}>確定</Text>
+          <TouchableOpacity
+            style={styles.footerButton}
+            onPress={uploading ? null : onAddButtonPress}>
+            <Entypo name="plus" size={20} color={Colors.WHITE} />
+            <Text style={styles.footerButtonText}>加入圖庫</Text>
           </TouchableOpacity>
         </View>
-      </View>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -96,10 +155,26 @@ const styles = StyleSheet.create({
     color: Colors.TITLE,
   },
   imageTitle: {
+    marginBottom: 8,
     fontSize: 16,
     fontWeight: 'bold',
-    marginBottom: 36,
     color: Colors.PARAGRAPH,
+  },
+  imageTitleInput: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    marginBottom: 8,
+    paddingHorizontal: 8,
+    borderRadius: 4,
+    borderWidth: 1,
+    backgroundColor: Colors.GRAY,
+    color: Colors.PARAGRAPH,
+  },
+  imageTitleLength: {
+    marginBottom: 48,
+    fontSize: 10,
+    color: Colors.PARAGRAPH,
+    textAlign: 'right',
   },
   footer: {
     flexDirection: 'row',
@@ -117,7 +192,8 @@ const styles = StyleSheet.create({
   },
   footerButtonText: {
     position: 'relative',
-    top: -1,
+    top: -2,
+    marginLeft: 4,
     fontSize: 14,
     fontWeight: 'bold',
     color: Colors.WHITE,

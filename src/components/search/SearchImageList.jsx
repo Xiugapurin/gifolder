@@ -11,16 +11,24 @@ import Error from '../common/Error';
 import Empty from '../common/Empty';
 import SearchCardModal from '../modals/SearchCardModal';
 
-const Card = ({item, i, setActiveItem, toggleModal}) => {
+const Card = ({
+  item,
+  i,
+  setActiveItem,
+  setActiveItemAspectRatio,
+  toggleModal,
+}) => {
   const [imageAspectRatio, setImageAspectRatio] = useState(16 / 9);
   const isLeft = i % 2 === 0;
+
   const onCardPress = async () => {
-    await setActiveItem(item);
+    setActiveItem(item);
+    setActiveItemAspectRatio(imageAspectRatio);
     toggleModal();
   };
 
   const onCardLongPress = async () => {
-    Clipboard.setString(item.uri);
+    Clipboard.setString(item.media_formats.tinygif.url);
   };
 
   return (
@@ -78,9 +86,10 @@ const Footer = () => (
   </View>
 );
 
-const SearchImageList = ({fetchImage, images, isLoading, error}) => {
+const SearchImageList = ({images, isLoading, error}) => {
   const [isCardMenuModalVisible, setIsCardMenuModalVisible] = useState(false);
   const [activeItem, setActiveItem] = useState(null);
+  const [activeItemAspectRatio, setActiveItemAspectRatio] = useState(16 / 9);
 
   if (isLoading) {
     return <Loading />;
@@ -106,7 +115,11 @@ const SearchImageList = ({fetchImage, images, isLoading, error}) => {
         onBackButtonPress={toggleModal}
         useNativeDriver={true}
         backdropOpacity={0.5}>
-        <SearchCardModal toggleModal={toggleModal} activeItem={activeItem} />
+        <SearchCardModal
+          toggleModal={toggleModal}
+          activeItem={activeItem}
+          activeItemAspectRatio={activeItemAspectRatio}
+        />
       </Modal>
 
       <Text style={styles.title}>搜尋結果</Text>
@@ -124,6 +137,7 @@ const SearchImageList = ({fetchImage, images, isLoading, error}) => {
             item={item}
             i={index}
             setActiveItem={setActiveItem}
+            setActiveItemAspectRatio={setActiveItemAspectRatio}
             toggleModal={toggleModal}
           />
         )}
