@@ -128,12 +128,12 @@ const useUploadImage = () => {
     try {
       await createTable(); // 等待資料表創建完成
 
-      if (title === '') title = '無標題';
+      imageTitle = title === '' ? '無標題' : title;
 
       db.transaction(tx => {
         tx.executeSql(
           'INSERT INTO images (uri, title, aspect_ratio) VALUES (?, ?, ?)',
-          [imageURI, title, aspectRatio],
+          [imageURI, imageTitle, aspectRatio],
           () => {
             console.log('圖片已上傳並保存');
             setComplete(true);
@@ -154,6 +154,43 @@ const useUploadImage = () => {
 
   return {uploadImage, uploading, complete, error};
 };
+
+const useUpdateImage = () => {
+  const [updating, setUpdating] = useState(false);
+  const [error, setError] = useState(null);
+
+  const updateImageTitle = async (imageID, title) => {
+    setUpdating(true);
+
+    try {
+      const newTitle = title === '' ? '無標題' : title;
+
+      db.transaction(tx => {
+        tx.executeSql(
+          'UPDATE images SET title = ? WHERE ID = ?',
+          [newTitle, imageID],
+          () => {
+            console.log('圖片標題已更新');
+            setComplete(true);
+          },
+          dbError => {
+            console.log('SQL error:', dbError);
+            setError('更新圖片標題失敗');
+          },
+        );
+      });
+    } catch (error) {
+      console.log('發生錯誤:', error);
+      setError('發生錯誤');
+    } finally {
+      setUpdating(false);
+    }
+  };
+
+  return {updateImageTitle, updating, error};
+};
+
+export default useUpdateImage;
 
 const useDeleteImage = () => {
   const [error, setError] = useState(null);

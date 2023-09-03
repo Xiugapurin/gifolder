@@ -22,12 +22,12 @@ const {Entypo} = Icons;
 
 const Card = ({item, i, setActiveItem, toggleModal}) => {
   const onCardPress = async () => {
-    Clipboard.setString(item.uri);
+    setActiveItem(item);
+    toggleModal();
   };
 
   const onCardLongPress = async () => {
-    await setActiveItem(item);
-    toggleModal();
+    Clipboard.setString(item.uri);
   };
 
   return (
@@ -66,7 +66,6 @@ const EmptyCard = () => {
       />
       <Text style={styles.emptyCardText}>看起來這裡空空如也...</Text>
       <Text style={styles.emptyCardText}>點擊這裡來上傳圖片！</Text>
-      {/* <Text style={styles.cardTime}>3分鐘前</Text> */}
     </TouchableOpacity>
   );
 };

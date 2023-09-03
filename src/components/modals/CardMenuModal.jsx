@@ -5,16 +5,30 @@ import {
   Share,
   TouchableOpacity,
   ToastAndroid,
+  TextInput,
+  Keyboard,
 } from 'react-native';
-import React from 'react';
+import React, {useState} from 'react';
+import Clipboard from '@react-native-clipboard/clipboard';
 import {Colors, Icons} from '../../utils';
 import FastImage from 'react-native-fast-image';
-import {useDeleteImage} from '../../hooks/useImage';
+import useUpdateImage, {useDeleteImage} from '../../hooks/useImage';
 
 const {Ionicons} = Icons;
 
 const CardMenuModal = ({toggleModal, activeItem, onRefresh}) => {
-  const {deleteImage, error} = useDeleteImage();
+  const [imageTitle, setImageTitle] = useState(activeItem?.title);
+  const [imageTitleLength, setImageTitleLength] = useState(
+    activeItem?.title?.length,
+  );
+  const [isInputFocus, setIsInputFocus] = useState(false);
+  const {deleteImage, error: deleteError} = useDeleteImage();
+  const {updateImageTitle, updating, error: updateError} = useUpdateImage();
+
+  const onChangeText = text => {
+    setImageTitle(text);
+    setImageTitleLength(text.length);
+  };
 
   const onDeletePress = async () => {
     await deleteImage(activeItem?.ID);
@@ -22,13 +36,31 @@ const CardMenuModal = ({toggleModal, activeItem, onRefresh}) => {
     toggleModal();
   };
 
+  const onUpdate = async () => {
+    updateImageTitle(activeItem.ID, imageTitle)
+      .then(() => {
+        ToastAndroid.showWithGravity(
+          '圖片名稱已更新！',
+          ToastAndroid.SHORT,
+          ToastAndroid.BOTTOM,
+        );
+      })
+      .catch(() => {
+        ToastAndroid.show(updateError, ToastAndroid.SHORT);
+      })
+      .finally(() => {
+        onRefresh();
+        toggleModal();
+      });
+  };
+
   const onShare = async () => {
     const uri = activeItem?.uri;
-    const message = uri.includes('tenor.com') ? uri.replace('.gif', '') : uri;
+    // const message = uri.includes('tenor.com') ? uri.replace('.gif', '') : uri;
 
     try {
       const result = await Share.share({
-        message: message,
+        message: uri,
       });
     } catch (error) {
       console.log(error);
@@ -37,7 +69,10 @@ const CardMenuModal = ({toggleModal, activeItem, onRefresh}) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.modal}>
+      <TouchableOpacity
+        style={styles.modal}
+        onPress={Keyboard.dismiss}
+        activeOpacity={1}>
         {/* START Header */}
         <View style={styles.header}>
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
@@ -61,31 +96,83 @@ const CardMenuModal = ({toggleModal, activeItem, onRefresh}) => {
             }}
             resizeMode={FastImage.resizeMode.contain}
           />
+          <Text style={styles.imageTitle}>圖片名稱</Text>
+          <TextInput
+            style={[
+              styles.imageTitleInput,
+              isInputFocus
+                ? {
+                    borderColor: Colors.PRIMARY,
+                    backgroundColor: Colors.WHITE,
+                  }
+                : {borderColor: Colors.GRAY},
+            ]}
+            value={imageTitle}
+            onChangeText={onChangeText}
+            placeholder="無標題"
+            placeholderTextColor={Colors.GRAY}
+            multiline={true}
+            onFocus={() => setIsInputFocus(true)}
+            onBlur={() => setIsInputFocus(false)}
+            maxLength={50}
+          />
           <Text
-            numberOfLines={2}
-            ellipsizeMode="tail"
-            style={styles.imageTitle}>
-            {activeItem?.title}
-          </Text>
+            style={styles.imageTitleLength}>{`${imageTitleLength} / 50`}</Text>
         </View>
 
         <View style={styles.footer}>
-          <TouchableOpacity
-            style={[styles.footerButton, {backgroundColor: Colors.CANCEL}]}
-            onPress={onDeletePress}>
-            <Ionicons name="trash" size={20} color={Colors.WHITE} />
-            <Text style={[styles.footerButtonText, {marginLeft: 4}]}>
-              刪除圖片
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.footerButton} onPress={onShare}>
-            <Ionicons name="share-social" size={20} color={Colors.WHITE} />
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.footerButton} onPress={toggleModal}>
-            <Text style={styles.footerButtonText}>確定</Text>
-          </TouchableOpacity>
+          <View>
+            <TouchableOpacity
+              style={[
+                styles.footerButton,
+                {backgroundColor: Colors.WHITE, marginBottom: 8},
+              ]}
+              onPress={() => {
+                Clipboard.setString(activeItem.uri);
+              }}>
+              <Ionicons
+                name="copy-outline"
+                size={20}
+                color={Colors.PARAGRAPH}
+              />
+              <Text
+                style={[styles.footerButtonText, {color: Colors.PARAGRAPH}]}>
+                複製連結
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.footerButton, {backgroundColor: Colors.CANCEL}]}
+              onPress={onDeletePress}>
+              <Ionicons name="trash" size={20} color={Colors.WHITE} />
+              <Text style={styles.footerButtonText}>刪除圖片</Text>
+            </TouchableOpacity>
+          </View>
+          <View>
+            <TouchableOpacity
+              style={[
+                styles.footerButton,
+                {backgroundColor: Colors.WHITE, marginBottom: 8},
+              ]}
+              onPress={onShare}>
+              <Ionicons
+                name="share-social"
+                size={20}
+                color={Colors.PARAGRAPH}
+              />
+              <Text
+                style={[styles.footerButtonText, {color: Colors.PARAGRAPH}]}>
+                分享圖片
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.footerButton}
+              onPress={updating ? null : onUpdate}>
+              <Ionicons name="checkmark-sharp" size={20} color={Colors.WHITE} />
+              <Text style={styles.footerButtonText}>確定修改</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -119,15 +206,31 @@ const styles = StyleSheet.create({
     color: Colors.TITLE,
   },
   imageTitle: {
+    marginBottom: 8,
     fontSize: 16,
     fontWeight: 'bold',
-    marginBottom: 36,
     color: Colors.PARAGRAPH,
+  },
+  imageTitleInput: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    marginBottom: 8,
+    paddingHorizontal: 8,
+    borderRadius: 4,
+    borderWidth: 1,
+    backgroundColor: Colors.GRAY,
+    color: Colors.PARAGRAPH,
+  },
+  imageTitleLength: {
+    marginBottom: 48,
+    fontSize: 10,
+    color: Colors.PARAGRAPH,
+    textAlign: 'right',
   },
   footer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
+    alignItems: 'flex-end',
   },
   footerButton: {
     flexDirection: 'row',
@@ -141,6 +244,7 @@ const styles = StyleSheet.create({
   footerButtonText: {
     position: 'relative',
     top: -1,
+    marginLeft: 4,
     fontSize: 14,
     fontWeight: 'bold',
     color: Colors.WHITE,

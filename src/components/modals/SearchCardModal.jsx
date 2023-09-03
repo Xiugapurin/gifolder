@@ -96,6 +96,8 @@ const SearchCardModal = ({toggleModal, activeItem, activeItemAspectRatio}) => {
             ]}
             value={imageTitle}
             onChangeText={onChangeText}
+            placeholder="無標題"
+            placeholderTextColor={Colors.GRAY}
             multiline={true}
             onFocus={() => setIsInputFocus(true)}
             onBlur={() => setIsInputFocus(false)}
