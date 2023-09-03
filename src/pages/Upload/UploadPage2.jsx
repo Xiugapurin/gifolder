@@ -16,8 +16,14 @@ const {Ionicons, Entypo} = Icons;
 
 const UploadPage2 = ({toPrev, imageURI, imageAspectRatio}) => {
   const [imageTitle, setImageTitle] = useState('');
+  const [imageTitleLength, setImageTitleLength] = useState(0);
   const {uploadImage, uploading, error} = useUploadImage();
   const navigation = useNavigation();
+
+  const onChangeText = text => {
+    setImageTitle(text);
+    setImageTitleLength(text.length);
+  };
 
   const onUploadPress = async () => {
     await uploadImage(imageURI, imageTitle, imageAspectRatio);
@@ -44,7 +50,7 @@ const UploadPage2 = ({toPrev, imageURI, imageAspectRatio}) => {
             value={imageTitle}
             placeholder="無標題"
             placeholderTextColor={Colors.PARAGRAPH}
-            onChangeText={setImageTitle}
+            onChangeText={onChangeText}
             maxLength={50}
             multiline={true}
           />
@@ -58,6 +64,7 @@ const UploadPage2 = ({toPrev, imageURI, imageAspectRatio}) => {
             </TouchableOpacity>
           )}
         </View>
+        <Text style={styles.inputLength}>{`${imageTitleLength} / 50`}</Text>
       </View>
 
       <View style={styles.buttonRow}>
@@ -115,6 +122,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingLeft: 12,
     paddingRight: 36,
+    marginBottom: 8,
     borderRadius: 8,
     color: Colors.PARAGRAPH,
     backgroundColor: Colors.GRAY,
@@ -123,6 +131,12 @@ const styles = StyleSheet.create({
   inputClose: {
     position: 'absolute',
     right: 12,
+  },
+  inputLength: {
+    fontSize: 14,
+    fontFamily: 'sans-serif-condensed',
+    color: Colors.PARAGRAPH,
+    textAlign: 'right',
   },
   buttonRow: {
     width: '100%',

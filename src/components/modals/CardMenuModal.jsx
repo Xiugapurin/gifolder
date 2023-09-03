@@ -224,6 +224,7 @@ const styles = StyleSheet.create({
   imageTitleLength: {
     marginBottom: 48,
     fontSize: 10,
+    fontFamily: 'sans-serif-condensed',
     color: Colors.PARAGRAPH,
     textAlign: 'right',
   },

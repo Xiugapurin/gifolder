@@ -1,8 +1,7 @@
 import {Text, View, StyleSheet, TouchableOpacity} from 'react-native';
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
 import FastImage from 'react-native-fast-image';
 import Modal from 'react-native-modal';
-import LottieView from 'lottie-react-native';
 import Clipboard from '@react-native-clipboard/clipboard';
 import {MasonryFlashList} from '@shopify/flash-list';
 import {Colors, DeviceSize} from '../../utils';
@@ -18,8 +17,9 @@ const Card = ({
   setActiveItemAspectRatio,
   toggleModal,
 }) => {
-  const [imageAspectRatio, setImageAspectRatio] = useState(16 / 9);
   const isLeft = i % 2 === 0;
+  const image = item?.media_formats?.tinygif;
+  const imageAspectRatio = image ? image.dims[0] / image.dims[1] : 16 / 9;
 
   const onCardPress = async () => {
     setActiveItem(item);
@@ -28,25 +28,11 @@ const Card = ({
   };
 
   const onCardLongPress = async () => {
-    Clipboard.setString(item.media_formats.tinygif.url);
+    Clipboard.setString(image?.url);
   };
 
   return (
     <>
-      {/* Preload to estimate aspectRatio */}
-      <FastImage
-        source={{uri: item.media_formats.tinygif.url}}
-        style={{
-          position: 'absolute',
-          left: -100,
-          width: 100,
-          aspectRatio: imageAspectRatio,
-        }}
-        onLoad={e => {
-          setImageAspectRatio(e.nativeEvent.width / e.nativeEvent.height);
-        }}
-        resizeMode={FastImage.resizeMode.stretch}
-      />
       <TouchableOpacity
         style={[styles.card, {marginLeft: isLeft ? 0 : 12}]}
         activeOpacity={0.8}
@@ -55,7 +41,7 @@ const Card = ({
         onLongPress={onCardLongPress}>
         <FastImage
           source={{
-            uri: item.media_formats.tinygif.url,
+            uri: image?.url,
           }}
           style={{
             width: '100%',
@@ -122,7 +108,11 @@ const SearchImageList = ({images, isLoading, error}) => {
         />
       </Modal>
 
-      <Text style={styles.title}>搜尋結果</Text>
+      <View style={styles.titleRow}>
+        <Text style={styles.title}>搜尋結果</Text>
+        <Text style={styles.subtitle}>{'(長按可複製連結)'}</Text>
+      </View>
+
       <MasonryFlashList
         showsVerticalScrollIndicator={false}
         ListHeaderComponent={<View />}
@@ -149,11 +139,21 @@ const SearchImageList = ({images, isLoading, error}) => {
 export default SearchImageList;
 
 const styles = StyleSheet.create({
+  titleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
     color: Colors.TITLE,
     marginBottom: 12,
+  },
+  subtitle: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    color: Colors.PARAGRAPH,
+    marginLeft: 8,
   },
   card: {
     flex: 1,
