@@ -6,6 +6,7 @@ import SearchBar from './search/SearchBar';
 import SearchImageList from './search/SearchImageList';
 import CardMenuModal from './modals/CardMenuModal';
 import OrderModal from './modals/OrderModal';
+import WarningModal from './modals/WarningModal';
 
 export {
   Loading,
@@ -16,4 +17,5 @@ export {
   SearchImageList,
   CardMenuModal,
   OrderModal,
+  WarningModal,
 };

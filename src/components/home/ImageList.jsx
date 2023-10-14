@@ -21,12 +21,17 @@ import Empty from '../common/Empty';
 const {Entypo} = Icons;
 
 const Card = ({item, i, setActiveItem, toggleModal}) => {
-  const onCardPress = async () => {
-    setActiveItem(item);
-    toggleModal();
+  const navigation = useNavigation();
+  // const onCardPress = async () => {
+  //   setActiveItem(item);
+  //   toggleModal();
+  // };
+
+  const onCardPress = () => {
+    navigation.push('Image', {imageInfo: item});
   };
 
-  const onCardLongPress = async () => {
+  const onCardLongPress = () => {
     Clipboard.setString(item.uri);
   };
 

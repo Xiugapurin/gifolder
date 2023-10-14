@@ -1,10 +1,11 @@
 import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
-import React, {useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import Modal from 'react-native-modal';
 
 import {Colors, Icons} from '../utils';
 import {ImageList, HomeSearchBar} from '../components';
 import OrderModal from '../components/modals/OrderModal';
+import {useFocusEffect} from '@react-navigation/native';
 
 const {Ionicons} = Icons;
 
@@ -13,10 +14,21 @@ const Home = () => {
   const [orderBy, setOrderBy] = useState('upload_time');
   const [order, setOrder] = useState('DESC');
   const [isOrderModalVisible, setIsOrderModalVisible] = useState(false);
+  const [isListVisible, setIsListVisible] = useState(false);
 
   const toggleModal = () => {
     setIsOrderModalVisible(!isOrderModalVisible);
   };
+
+  useFocusEffect(
+    useCallback(() => {
+      setIsListVisible(true);
+
+      return () => {
+        setIsListVisible(false);
+      };
+    }, []),
+  );
 
   return (
     <View style={styles.container}>
@@ -54,7 +66,9 @@ const Home = () => {
         </TouchableOpacity>
       </View>
 
-      <ImageList searchParam={searchParam} orderBy={orderBy} order={order} />
+      {isListVisible && (
+        <ImageList searchParam={searchParam} orderBy={orderBy} order={order} />
+      )}
     </View>
   );
 };

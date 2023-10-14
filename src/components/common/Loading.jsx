@@ -1,6 +1,7 @@
-import {StyleSheet, View, Text} from 'react-native';
+import {View, Text} from 'react-native';
 import LottieView from 'lottie-react-native';
 import React from 'react';
+import {Colors} from '../../utils';
 
 const Loading = () => {
   return (
@@ -11,15 +12,16 @@ const Loading = () => {
         alignItems: 'center',
       }}>
       <LottieView
-        style={{width: '40%'}}
+        style={{width: '80%'}}
         autoPlay
         loop
         source={require('../../assets/animations/image_loading.json')}
       />
+      <Text style={{fontSize: 16, fontWeight: 'bold', color: Colors.PARAGRAPH}}>
+        載入中...
+      </Text>
     </View>
   );
 };
 
 export default Loading;
-
-const styles = StyleSheet.create({});

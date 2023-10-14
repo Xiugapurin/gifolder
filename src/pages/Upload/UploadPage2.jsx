@@ -27,7 +27,7 @@ const UploadPage2 = ({toPrev, imageURI, imageAspectRatio}) => {
 
   const onUploadPress = async () => {
     await uploadImage(imageURI, imageTitle, imageAspectRatio);
-    navigation.navigate('Recent');
+    navigation.navigate('Home');
   };
 
   return (
@@ -59,6 +59,7 @@ const UploadPage2 = ({toPrev, imageURI, imageAspectRatio}) => {
               style={styles.inputClose}
               onPress={() => {
                 setImageTitle('');
+                setImageTitleLength(3);
               }}>
               <Ionicons name="close" color={Colors.TITLE} size={18} />
             </TouchableOpacity>
