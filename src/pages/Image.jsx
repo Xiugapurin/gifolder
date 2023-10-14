@@ -92,7 +92,12 @@ const Image = ({route, navigation}) => {
         />
       </Modal>
       <View style={styles.header}>
-        <Entypo name="info-with-circle" color={Colors.TITLE} size={32} />
+        <TouchableOpacity
+          style={styles.backButton}
+          activeOpacity={0.8}
+          onPress={exit}>
+          <Ionicons name="arrow-back" color={Colors.TITLE} size={28} />
+        </TouchableOpacity>
         <Text style={styles.title}>圖片詳情</Text>
       </View>
 
@@ -175,7 +180,7 @@ const Image = ({route, navigation}) => {
 
           <Text style={styles.sectionTitle}>圖片連結</Text>
           <View style={styles.imageUri}>
-            <Text>{truncatedUri(uri)}</Text>
+            <Text style={{color: Colors.PARAGRAPH}}>{truncatedUri(uri)}</Text>
             <TouchableOpacity
               style={styles.imageUriButton}
               onPress={() => {
@@ -223,6 +228,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 24,
+  },
+  backButton: {
+    padding: 4,
+    borderRadius: 8,
+    backgroundColor: Colors.WHITE,
+    elevation: 3,
   },
   title: {
     position: 'relative',
