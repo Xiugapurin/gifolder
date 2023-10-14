@@ -39,16 +39,13 @@ const UploadMethodButton = ({iconName, title, active, styleProps, onPress}) => {
   );
 };
 
-const UploadPage1 = ({
-  toNext,
+const UploadProgress = ({
   imageURI,
-  setImageURI,
   imageAspectRatio,
+  setIsImageExist,
   setImageAspectRatio,
 }) => {
   const [progress, setProgress] = useState(0);
-  const [isImageExist, setIsImageExist] = useState(false);
-  const [uploadMethod, setUploadMethod] = useState('local');
 
   const onProgress = e => {
     const loaded = e.nativeEvent.loaded;
@@ -58,6 +55,41 @@ const UploadPage1 = ({
     if (calculatedProgress < 0) setProgress(0);
     else setProgress(calculatedProgress);
   };
+
+  return (
+    <>
+      <FastImage
+        source={{uri: imageURI}}
+        style={{
+          position: 'absolute',
+          left: -100,
+          width: 100,
+          aspectRatio: imageAspectRatio,
+        }}
+        onProgress={onProgress}
+        onLoadStart={() => {
+          setIsImageExist(false);
+        }}
+        onLoad={e => {
+          setIsImageExist(true);
+          setImageAspectRatio(e.nativeEvent.width / e.nativeEvent.height);
+        }}
+        resizeMode={FastImage.resizeMode.stretch}
+      />
+      <Text style={styles.loadingProgress}>{`${progress} %`}</Text>
+    </>
+  );
+};
+
+const UploadPage1 = ({
+  toNext,
+  imageURI,
+  setImageURI,
+  imageAspectRatio,
+  setImageAspectRatio,
+}) => {
+  const [isImageExist, setIsImageExist] = useState(false);
+  const [uploadMethod, setUploadMethod] = useState('local');
 
   const uploadMethodButtons = [
     {
@@ -82,25 +114,6 @@ const UploadPage1 = ({
 
   return (
     <>
-      {/* 圖片載入進度 */}
-      <FastImage
-        source={{uri: imageURI}}
-        style={{
-          position: 'absolute',
-          left: -100,
-          width: 100,
-          aspectRatio: imageAspectRatio,
-        }}
-        onProgress={onProgress}
-        onLoadStart={() => {
-          setIsImageExist(false);
-        }}
-        onLoad={e => {
-          setIsImageExist(true);
-          setImageAspectRatio(e.nativeEvent.width / e.nativeEvent.height);
-        }}
-        resizeMode={FastImage.resizeMode.stretch}
-      />
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{
@@ -129,7 +142,12 @@ const UploadPage1 = ({
                   loop
                   source={require('../../assets/animations/image_loading.json')}
                 />
-                <Text style={styles.loadingProgress}>{`${progress} %`}</Text>
+                <UploadProgress
+                  imageURI={imageURI}
+                  imageAspectRatio={imageAspectRatio}
+                  setImageAspectRatio={setImageAspectRatio}
+                  setIsImageExist={setIsImageExist}
+                />
               </View>
             )}
           </View>

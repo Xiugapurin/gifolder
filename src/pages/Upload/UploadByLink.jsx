@@ -90,17 +90,28 @@ const UploadByLink = ({imageURI, setImageURI, setIsImageExist}) => {
 
       {/* 更換副檔名按鈕 */}
       {imageURI.length > 0 && (
-        <View style={styles.extensionButtonRow}>
-          <Text style={styles.extensionButtonRowTitle}>圖片類型</Text>
-          {['gif', 'png', 'jpg'].map((extension, i) => (
-            <ExtensionButton
-              key={`${extension}-${i.toString()}`}
-              extension={extension}
-              active={imageExtension === extension}
-              onPress={handleExtensionPress}
-            />
-          ))}
-        </View>
+        <>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'baseline',
+            }}>
+            <Text style={styles.extensionButtonRowTitle}>圖片類型</Text>
+            <Text style={styles.extensionButtonRowSubtitle}>
+              {'  (若圖片未成功載入請點此更換副檔名)'}
+            </Text>
+          </View>
+          <View style={styles.extensionButtonRow}>
+            {['gif', 'png', 'jpg'].map((extension, i) => (
+              <ExtensionButton
+                key={`${extension}-${i.toString()}`}
+                extension={extension}
+                active={imageExtension === extension}
+                onPress={handleExtensionPress}
+              />
+            ))}
+          </View>
+        </>
       )}
     </>
   );
@@ -131,16 +142,21 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
+    gap: 8,
   },
   extensionButtonRowTitle: {
-    fontSize: 14,
+    fontSize: 16,
     fontWeight: 'bold',
-    color: Colors.PARAGRAPH,
+    color: Colors.TITLE,
+  },
+  extensionButtonRowSubtitle: {
+    fontSize: 12,
+    color: Colors.TITLE,
+    marginBottom: 12,
   },
   extensionButton: {
     paddingVertical: 8,
     paddingHorizontal: 16,
-    marginLeft: 8,
     borderRadius: 4,
     backgroundColor: Colors.WHITE,
     elevation: 2,
