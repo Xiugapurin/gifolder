@@ -3,7 +3,7 @@ import LottieView from 'lottie-react-native';
 import React from 'react';
 import {Colors} from '../../utils';
 
-const Error = () => {
+const Error = ({error}) => {
   return (
     <View
       style={{
@@ -18,7 +18,7 @@ const Error = () => {
         source={require('../../assets/animations/error.json')}
       />
       <Text style={{fontSize: 18, fontWeight: 'bold', color: Colors.PARAGRAPH}}>
-        似乎發生了錯誤 ...
+        {error}
       </Text>
     </View>
   );

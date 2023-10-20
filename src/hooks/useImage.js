@@ -12,25 +12,35 @@ const db = SQLite.openDatabase(
   },
 );
 
-const createTable = () => {
-  return new Promise((resolve, reject) => {
-    db.transaction(tx => {
-      tx.executeSql(
-        'CREATE TABLE IF NOT EXISTS ' +
-          'images ' +
-          '(ID INTEGER PRIMARY KEY AUTOINCREMENT, uri TEXT NOT NULL, title TEXT, aspect_ratio INTEGER, upload_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP);',
-        [],
-        () => {
-          console.log('資料表創建成功');
-          resolve(); // 資料表創建成功後 resolve
-        },
-        error => {
-          console.log('SQL error:', error);
-          reject(error); // 發生錯誤時 reject
-        },
-      );
-    });
+const useCreateTable = () => {
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const createTable = () => {
+      db.transaction(tx => {
+        tx.executeSql(
+          'CREATE TABLE IF NOT EXISTS ' +
+            'images ' +
+            '(ID INTEGER PRIMARY KEY AUTOINCREMENT, uri TEXT NOT NULL, title TEXT, aspect_ratio INTEGER, upload_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP);',
+          [],
+          () => {
+            console.log('資料表創建成功');
+            setIsLoading(false);
+          },
+          error => {
+            console.log('SQL error:', error);
+            setIsLoading(false);
+            setError('發生錯誤，請稍後再試');
+          },
+        );
+      });
+    };
+
+    createTable();
   });
+
+  return {isLoading, error};
 };
 
 const useFetchImages = (
@@ -126,8 +136,6 @@ const useUploadImage = () => {
     setUploading(true);
 
     try {
-      await createTable(); // 等待資料表創建完成
-
       imageTitle = title === '' ? '無標題' : title;
 
       db.transaction(tx => {
@@ -146,7 +154,7 @@ const useUploadImage = () => {
       });
     } catch (error) {
       console.log('發生錯誤:', error);
-      setError('發生錯誤');
+      setError('發生錯誤，請稍後再試');
     } finally {
       setUploading(false);
     }
@@ -181,7 +189,7 @@ const useUpdateImage = () => {
       });
     } catch (error) {
       console.log('發生錯誤:', error);
-      setError('發生錯誤');
+      setError('發生錯誤，請稍後再試');
     } finally {
       setUpdating(false);
     }
@@ -214,7 +222,7 @@ const useDeleteImage = () => {
       });
     } catch (error) {
       console.log('發生錯誤:', error);
-      setError('發生錯誤');
+      setError('發生錯誤，請稍後再試');
     }
   };
 
@@ -251,6 +259,7 @@ const useDeleteImagesTable = () => {
 };
 
 export {
+  useCreateTable,
   useFetchImages,
   useFetchImagesBySearchParam,
   useUploadImage,
