@@ -18,7 +18,7 @@ import Loading from '../common/Loading';
 import Error from '../common/Error';
 import Empty from '../common/Empty';
 
-const {Entypo} = Icons;
+const {Ionicons, Entypo} = Icons;
 
 const Card = ({item, i, setActiveItem, toggleModal}) => {
   const navigation = useNavigation();
@@ -55,23 +55,41 @@ const Card = ({item, i, setActiveItem, toggleModal}) => {
   );
 };
 
-const EmptyCard = () => {
+const EmptyItem = () => {
   const navigation = useNavigation();
 
   return (
-    <TouchableOpacity
-      style={styles.emptyCard}
-      activeOpacity={0.8}
-      onPress={() => navigation.navigate('Upload')}>
-      <Entypo
-        name="upload"
-        color={Colors.PRIMARY}
-        size={48}
-        style={{marginBottom: 12}}
-      />
-      <Text style={styles.emptyCardText}>看起來這裡空空如也...</Text>
-      <Text style={styles.emptyCardText}>點擊這裡來上傳圖片！</Text>
-    </TouchableOpacity>
+    <>
+      <View style={[styles.emptyCard, {paddingVertical: 16}]}>
+        <Text style={styles.emptyCardText}>看起來這裡空空如也...</Text>
+      </View>
+
+      <TouchableOpacity
+        style={styles.emptyCard}
+        activeOpacity={0.8}
+        onPress={() => navigation.navigate('Upload')}>
+        <Entypo
+          name="upload"
+          color={Colors.PRIMARY}
+          size={48}
+          style={{marginBottom: 12}}
+        />
+        <Text style={styles.emptyCardText}>讓我們開始上傳圖片！</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        style={styles.emptyCard}
+        activeOpacity={0.8}
+        onPress={() => navigation.navigate('Search')}>
+        <Ionicons
+          name="search-sharp"
+          color={Colors.PRIMARY}
+          size={48}
+          style={{marginBottom: 12}}
+        />
+        <Text style={styles.emptyCardText}>或是探索網路上的圖片！</Text>
+      </TouchableOpacity>
+    </>
   );
 };
 
@@ -89,7 +107,7 @@ const ImageList = ({searchParam, orderBy, order}) => {
   }
 
   if (error) {
-    return <Error />;
+    return <Error error={error} />;
   }
 
   const toggleModal = () => {
@@ -118,7 +136,7 @@ const ImageList = ({searchParam, orderBy, order}) => {
       <MasonryFlashList
         showsVerticalScrollIndicator={false}
         ListHeaderComponent={<View />}
-        ListEmptyComponent={searchParam ? <Empty /> : <EmptyCard />}
+        ListEmptyComponent={searchParam ? <Empty /> : <EmptyItem />}
         ListFooterComponent={<View style={{height: 300}} />}
         refreshControl={
           <RefreshControl
@@ -176,7 +194,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     width: '100%',
-    aspectRatio: 16 / 9,
+    paddingVertical: 32,
+    marginTop: 40,
     borderRadius: 4,
     backgroundColor: Colors.WHITE,
     elevation: 3,
