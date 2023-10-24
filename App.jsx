@@ -6,8 +6,7 @@ import FastImage from 'react-native-fast-image';
 
 import SettingImage from './src/assets/images/Dorito.png';
 import {Icons, Colors} from './src/utils';
-import {Home, Image, Search, Setting, Upload} from './src/pages';
-import {Text} from 'react-native';
+import {Changelog, Home, Image, Search, Setting, Upload} from './src/pages';
 import {useCreateTable, useDeleteImagesTable} from './src/hooks/useImage';
 import {Error, Loading} from './src/components';
 
@@ -27,7 +26,7 @@ const MainTab = () => (
         switch (route.name) {
           case 'Home':
             icon = (
-              <Entypo name="home" color={iconColor} size={focused ? 28 : 20} />
+              <Entypo name="home" color={iconColor} size={focused ? 24 : 20} />
             );
             break;
           case 'Search':
@@ -41,15 +40,15 @@ const MainTab = () => (
             break;
           case 'Upload':
             icon = (
-              <Entypo name="plus" color={iconColor} size={focused ? 28 : 20} />
+              <Entypo name="plus" color={iconColor} size={focused ? 32 : 24} />
             );
             break;
           case 'Setting':
             icon = (
               <FastImage
                 source={SettingImage}
-                tintColor={focused ? Colors.Yellow : '#000000'}
-                style={{width: focused ? 28 : 20, aspectRatio: 1}}
+                tintColor={Colors.Yellow}
+                style={{width: focused ? 36 : 28, aspectRatio: 1}}
               />
             );
             break;
@@ -150,7 +149,7 @@ const App = () => {
         }}>
         <Stack.Screen name="Root" component={MainTab} />
         <Stack.Screen name="Image" component={Image} />
-        {/* <Stack.Screen name="Setting" component={Setting} /> */}
+        <Stack.Screen name="Changelog" component={Changelog} />
       </Stack.Navigator>
     </NavigationContainer>
   );

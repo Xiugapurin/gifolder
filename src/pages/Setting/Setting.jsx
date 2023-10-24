@@ -1,16 +1,14 @@
 import {
-  StyleSheet,
   Text,
   View,
-  TouchableOpacity,
-  ScrollView,
-  ToastAndroid,
   FlatList,
+  StyleSheet,
+  ToastAndroid,
+  TouchableOpacity,
 } from 'react-native';
-import React, {useCallback, useState} from 'react';
 import FastImage from 'react-native-fast-image';
-import DoritoImage from '../assets/images/Dorito.png';
-import {Colors, Icons} from '../utils';
+import DoritoImage from '../../assets/images/Dorito.png';
+import {Colors, Icons} from '../../utils';
 
 const {Ionicons, Entypo} = Icons;
 
@@ -35,7 +33,7 @@ const RenderSections = ({item}) => {
   );
 };
 
-const Setting = () => {
+const Setting = ({navigation}) => {
   const ClearCache = () => {
     try {
       FastImage.clearDiskCache();
@@ -117,7 +115,9 @@ const Setting = () => {
           icon: <Entypo name="book" size={20} color={Colors.TITLE} />,
           title: '更新日誌',
           description: '',
-          onPress: null,
+          onPress: () => {
+            navigation.push('Changelog');
+          },
         },
       ],
     },
@@ -126,17 +126,8 @@ const Setting = () => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <FastImage
-          source={DoritoImage}
-          style={{
-            width: '40%',
-            aspectRatio: 1,
-            marginBottom: 12,
-          }}
-          resizeMode={FastImage.resizeMode.contain}
-        />
-        <Text style={styles.title}>Dorito</Text>
-        <Text style={styles.subtitle}>Ver 1.5.0</Text>
+        <Ionicons name="settings-sharp" color={Colors.TITLE} size={32} />
+        <Text style={styles.title}>設定</Text>
       </View>
 
       <FlatList
@@ -158,23 +149,15 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
   },
   header: {
+    flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 48,
+    marginBottom: 24,
   },
   title: {
-    fontSize: 28,
+    marginLeft: 16,
+    fontSize: 20,
     fontWeight: 'bold',
-    color: Colors.Yellow,
-    fontFamily: 'sans-serif-condensed',
-    textShadowColor: Colors.GRAY,
-    textShadowOffset: {width: 0, height: 0.5},
-    textShadowRadius: 1,
-  },
-  subtitle: {
-    fontSize: 14,
-    fontWeight: 'bold',
-    color: Colors.Yellow,
-    fontFamily: 'sans-serif-condensed',
+    color: Colors.TITLE,
   },
   section: {
     marginBottom: 16,
