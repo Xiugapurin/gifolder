@@ -1,11 +1,9 @@
 import {
   Text,
   View,
-  FlatList,
   StyleSheet,
-  ToastAndroid,
-  TouchableOpacity,
   ScrollView,
+  TouchableOpacity,
 } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import DoritoImage from '../../assets/images/Dorito.png';
@@ -38,6 +36,9 @@ const Changelog = ({navigation}) => {
           </View>
           <Text style={styles.contentDescription}>
             搜尋頁面現在能夠搜尋並使用高畫質圖片了！
+          </Text>
+          <Text style={styles.contentDescription}>
+            搜尋頁面現在搜尋時將會顯示搜尋建議！
           </Text>
           <Text style={styles.contentDescription}>
             搜尋欄現在不需要按下 Enter 就能搜尋！
