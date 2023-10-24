@@ -7,12 +7,10 @@ import {
 } from 'react-native';
 import {useState} from 'react';
 import FastImage from 'react-native-fast-image';
-import Modal from 'react-native-modal';
 import Clipboard from '@react-native-clipboard/clipboard';
 import {MasonryFlashList} from '@shopify/flash-list';
 import {useFetchImages} from '../../hooks/useImage';
 import {Colors, DeviceSize, Icons} from '../../utils';
-import CardMenuModal from '../modals/CardMenuModal';
 import {useNavigation} from '@react-navigation/native';
 import Loading from '../common/Loading';
 import Error from '../common/Error';
@@ -34,8 +32,6 @@ const Card = ({item, i, setActiveItem, toggleModal}) => {
   const onCardLongPress = () => {
     Clipboard.setString(item.uri);
   };
-
-  console.log(item);
 
   return (
     <TouchableOpacity

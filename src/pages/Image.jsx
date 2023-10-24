@@ -21,7 +21,6 @@ const {Ionicons, Entypo} = Icons;
 
 const Image = ({route, navigation}) => {
   const {imageInfo} = route.params;
-  console.log(imageInfo);
   const {ID, title, uri, tiny_uri, aspect_ratio} = imageInfo;
   const [prevTitle, setPrevTitle] = useState(title);
   const [imageTitle, setImageTitle] = useState(title);
@@ -34,7 +33,7 @@ const Image = ({route, navigation}) => {
   };
 
   const truncatedUri = uri =>
-    uri.length > 40 ? uri.slice(0, 40) + '...' : uri;
+    uri.length > 30 ? uri.slice(0, 30) + '...' : uri;
 
   const onChangeText = text => {
     setImageTitle(text);
