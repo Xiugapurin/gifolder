@@ -13,16 +13,15 @@ import {Colors, Icons} from '../../utils';
 
 const {Ionicons, Entypo} = Icons;
 
-const Changelog = () => {
+const Changelog = ({navigation}) => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <FastImage
           source={DoritoImage}
           style={{
-            width: '40%',
+            width: '36%',
             aspectRatio: 1,
-            marginBottom: 12,
           }}
           resizeMode={FastImage.resizeMode.contain}
         />
@@ -30,9 +29,8 @@ const Changelog = () => {
         <Text style={styles.subtitle}>Ver 1.5.0</Text>
       </View>
 
-      <ScrollView>
-        <Text style={styles.contentTitle}>版本 1.5.0 更新內容</Text>
-
+      <Text style={styles.contentTitle}>版本 1.5.0 更新內容</Text>
+      <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.contentSection}>
           <View style={styles.titleRow}>
             <Ionicons name="trending-up" size={20} color={Colors.PRIMARY} />
@@ -55,7 +53,29 @@ const Changelog = () => {
           <Text style={styles.contentDescription}>
             修復部分卡片及按鈕的陰影未顯示的問題
           </Text>
+          <Text style={styles.contentDescription}>
+            修復搜尋欄無法使用 Enter 鍵進行搜尋的問題
+          </Text>
         </View>
+
+        <View style={styles.contentSection}>
+          <View style={styles.titleRow}>
+            <Ionicons name="color-palette" size={20} color={Colors.PRIMARY} />
+            <Text style={styles.contentSubtitle}>其他更新</Text>
+          </View>
+          <Text style={styles.contentDescription}>
+            將主頁的搜尋欄輸入限制放寬至 20 字
+          </Text>
+        </View>
+        <TouchableOpacity
+          style={styles.backButton}
+          activeOpacity={0.8}
+          onPress={() => {
+            navigation.pop();
+          }}>
+          <Ionicons name="chevron-back" color={Colors.PARAGRAPH} size={20} />
+          <Text style={styles.backButtonText}>回設定頁</Text>
+        </TouchableOpacity>
       </ScrollView>
     </View>
   );
@@ -71,11 +91,12 @@ const styles = StyleSheet.create({
   },
   header: {
     alignItems: 'center',
-    marginBottom: 48,
+    marginBottom: 36,
   },
   titleRow: {
     flexDirection: 'row',
     alignItems: 'center',
+    marginBottom: 12,
   },
   title: {
     fontSize: 28,
@@ -95,8 +116,8 @@ const styles = StyleSheet.create({
   contentTitle: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: Colors.TITLE,
     marginBottom: 24,
+    color: Colors.TITLE,
   },
   contentSection: {
     marginBottom: 16,
@@ -106,7 +127,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginLeft: 8,
     color: Colors.PRIMARY,
-    marginBottom: 12,
   },
   contentDescription: {
     fontSize: 14,
@@ -118,5 +138,22 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.WHITE,
     marginBottom: 8,
     elevation: 2,
+  },
+  backButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    alignSelf: 'center',
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    marginBottom: 40,
+    borderRadius: 4,
+    backgroundColor: Colors.WHITE,
+    elevation: 2,
+  },
+  backButtonText: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    marginLeft: 4,
+    color: Colors.PARAGRAPH,
   },
 });
