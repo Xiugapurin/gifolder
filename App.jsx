@@ -2,7 +2,9 @@ import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import FastImage from 'react-native-fast-image';
 
+import SettingImage from './src/assets/images/Dorito.png';
 import {Icons, Colors} from './src/utils';
 import {Home, Image, Search, Setting, Upload} from './src/pages';
 import {Text} from 'react-native';
@@ -44,10 +46,10 @@ const MainTab = () => (
             break;
           case 'Setting':
             icon = (
-              <Ionicons
-                name="settings-sharp"
-                color={iconColor}
-                size={focused ? 28 : 20}
+              <FastImage
+                source={SettingImage}
+                tintColor={focused ? Colors.Yellow : '#000000'}
+                style={{width: focused ? 28 : 20, aspectRatio: 1}}
               />
             );
             break;
@@ -140,7 +142,12 @@ const App = () => {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator screenOptions={{headerShown: false, animation: 'fade'}}>
+      <Stack.Navigator
+        screenOptions={{
+          headerShown: false,
+          animation: 'fade',
+          animationDuration: 500,
+        }}>
         <Stack.Screen name="Root" component={MainTab} />
         <Stack.Screen name="Image" component={Image} />
         {/* <Stack.Screen name="Setting" component={Setting} /> */}
