@@ -16,7 +16,7 @@ const {Ionicons, Entypo} = Icons;
 
 const UploadPage2 = ({toPrev, imageURI, imageAspectRatio}) => {
   const [imageTitle, setImageTitle] = useState('');
-  const [imageTitleLength, setImageTitleLength] = useState(0);
+  const [imageTitleLength, setImageTitleLength] = useState(3);
   const {uploadImage, uploading, error} = useUploadImage();
   const navigation = useNavigation();
 
