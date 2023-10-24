@@ -66,9 +66,8 @@ const useSearchImage = searchParam => {
         setIsLoading(true);
         try {
           const response = await fetch(
-            `${TENOR_API_BASE_URL}?q=${searchParam}&key=${TENOR_API_KEY}&client_key=${TENOR_CLIENT_KEY}&country=TW&locale=zh-TW&ar_range=all&media_filter=gif,tinygif&limit=50`,
+            `${TENOR_API_BASE_URL}/search?q=${searchParam}&key=${TENOR_API_KEY}&client_key=${TENOR_CLIENT_KEY}&country=TW&locale=zh-TW&ar_range=all&media_filter=gif,tinygif&limit=50`,
           );
-          console.log('Fetching!!!');
 
           if (!response.ok) {
             throw new Error('API 請求失敗');
@@ -95,38 +94,49 @@ const useSearchImage = searchParam => {
   return {images, isLoading, error};
 };
 
-const useSearchSuggestion = () => {
+const useSearchSuggestion = searchParam => {
   const [suggestions, setSuggestions] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const getSearchSuggestion = async searchParam => {
-    setIsLoading(true);
+  const searchTimeoutRef = useRef(null);
 
-    try {
-      const response = await fetch(
-        `${TENOR_API_BASE_URL}?q=${searchParam}&key=${TENOR_API_KEY}&client_key=${TENOR_CLIENT_KEY}&country=TW&locale=zh-TW&ar_range=all&media_filter=gif,tinygif&limit=50`,
-      );
-
-      if (!response.ok) {
-        throw new Error('API 請求失敗');
-      }
-
-      const data = await response.json();
-
-      const results = data.results || [];
-
-      // 將圖片結果設置到狀態中
-      setSuggestions(results);
-      setError(null);
-    } catch (error) {
-      setError('暫時無法取得搜尋建議');
-    } finally {
-      setIsLoading(false);
+  useEffect(() => {
+    if (searchTimeoutRef.current) {
+      clearTimeout(searchTimeoutRef.current);
     }
-  };
 
-  return {getSearchSuggestion, suggestions, isLoading, error};
+    searchTimeoutRef.current = setTimeout(() => {
+      const getSuggestionFromTenor = async () => {
+        setIsLoading(true);
+        try {
+          const response = await fetch(
+            `${TENOR_API_BASE_URL}/search_suggestions?q=${searchParam}&key=${TENOR_API_KEY}&client_key=${TENOR_CLIENT_KEY}&limit=8`,
+          );
+
+          if (!response.ok) {
+            throw new Error('API 請求失敗');
+          }
+
+          const data = await response.json();
+
+          const results = data.results || [];
+
+          // 將圖片結果設置到狀態中
+          setSuggestions(results);
+          setError(null);
+        } catch (error) {
+          setError('暫時無法取得搜尋建議');
+        } finally {
+          setIsLoading(false);
+        }
+      };
+
+      getSuggestionFromTenor();
+    }, 300);
+  }, [searchParam]);
+
+  return {suggestions, isLoading, error};
 };
 
 export {useUploadImage, useSearchImage, useSearchSuggestion};

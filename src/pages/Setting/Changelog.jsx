@@ -40,6 +40,9 @@ const Changelog = ({navigation}) => {
             搜尋頁面現在能夠搜尋並使用高畫質圖片了！
           </Text>
           <Text style={styles.contentDescription}>
+            搜尋欄現在不需要按下 Enter 就能搜尋！
+          </Text>
+          <Text style={styles.contentDescription}>
             新增設定頁面，未來將有更多功能加入！
           </Text>
         </View>
@@ -52,9 +55,6 @@ const Changelog = ({navigation}) => {
           <Text style={styles.contentDescription}>修復部分文字跑版的問題</Text>
           <Text style={styles.contentDescription}>
             修復部分卡片及按鈕的陰影未顯示的問題
-          </Text>
-          <Text style={styles.contentDescription}>
-            修復搜尋欄無法使用 Enter 鍵進行搜尋的問題
           </Text>
         </View>
 
