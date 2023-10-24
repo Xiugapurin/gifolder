@@ -31,7 +31,7 @@ const SearchCardModal = ({toggleModal, activeItem, activeItemAspectRatio}) => {
   const onShare = async () => {
     try {
       const result = await Share.share({
-        message: activeItem?.media_formats.tinygif.url,
+        message: activeItem?.media_formats.gif.url,
       });
     } catch (error) {
       console.log(error);
@@ -40,7 +40,7 @@ const SearchCardModal = ({toggleModal, activeItem, activeItemAspectRatio}) => {
 
   const onAddButtonPress = () => {
     uploadImage(
-      activeItem?.media_formats.tinygif.url,
+      activeItem?.media_formats.gif.url,
       imageTitle,
       activeItemAspectRatio,
     )

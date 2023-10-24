@@ -59,7 +59,7 @@ const useFetchSearchImage = () => {
 
     try {
       const response = await fetch(
-        `${TENOR_API_BASE_URL}?q=${searchParam}&key=${TENOR_API_KEY}&client_key=${TENOR_CLIENT_KEY}&country=TW&locale=zh-TW&ar_range=standard&media_filter=tinygif&limit=50`,
+        `${TENOR_API_BASE_URL}?q=${searchParam}&key=${TENOR_API_KEY}&client_key=${TENOR_CLIENT_KEY}&country=TW&locale=zh-TW&ar_range=all&media_filter=gif,tinygif&limit=20`,
       );
 
       if (!response.ok) {
@@ -74,7 +74,7 @@ const useFetchSearchImage = () => {
       setImages(results);
       setError(null);
     } catch (error) {
-      setError('獲取圖片失敗');
+      setError('搜尋圖片失敗');
     } finally {
       setIsLoading(false);
     }
