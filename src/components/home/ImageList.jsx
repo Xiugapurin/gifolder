@@ -135,7 +135,7 @@ const ImageList = ({searchParam, orderBy, order}) => {
         showsVerticalScrollIndicator={false}
         ListHeaderComponent={<View />}
         ListEmptyComponent={searchParam ? <Empty /> : <EmptyItem />}
-        ListFooterComponent={<View style={{marginTop: 200}} />}
+        ListFooterComponent={<View style={{marginTop: 300}} />}
         contentContainerStyle={{}}
         refreshControl={
           <RefreshControl
