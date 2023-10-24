@@ -50,12 +50,18 @@ const Home = () => {
           setOrder={setOrder}
         />
       </Modal>
-      <HomeSearchBar
-        searchParam={searchParam}
-        setSearchParam={setSearchParam}
-      />
 
       <View style={styles.header}>
+        <HomeSearchBar
+          searchParam={searchParam}
+          setSearchParam={setSearchParam}
+        />
+        {/* <TouchableOpacity style={styles.settingButton}>
+          <Ionicons name="settings-sharp" size={24} color={Colors.TITLE} />
+        </TouchableOpacity> */}
+      </View>
+
+      <View style={styles.titleRow}>
         <Text style={styles.title}>
           {searchParam ? '搜尋結果' : '我的圖庫'}
         </Text>
@@ -77,10 +83,24 @@ export default Home;
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     paddingVertical: 36,
     paddingHorizontal: 24,
   },
   header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 24,
+  },
+  settingButton: {
+    width: '10%',
+    aspectRatio: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 1000,
+  },
+  titleRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',

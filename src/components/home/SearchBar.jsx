@@ -42,10 +42,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 24,
   },
   input: {
-    flex: 1,
+    width: '100%',
     paddingLeft: 48,
     backgroundColor: Colors.GRAY,
     color: Colors.PARAGRAPH,
