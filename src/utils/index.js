@@ -14,6 +14,7 @@ export const Colors = {
   UNFOCUS: '#C4C4C4',
   CANCEL: '#E74D38',
   WHITE: '#FFFFFF',
+  Yellow: '#F3DF7C',
 };
 
 export const DeviceSize = {

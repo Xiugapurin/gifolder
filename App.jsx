@@ -4,7 +4,7 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
 import {Icons, Colors} from './src/utils';
-import {Home, Image, Search, Upload} from './src/pages';
+import {Home, Image, Search, Setting, Upload} from './src/pages';
 import {Text} from 'react-native';
 import {useCreateTable, useDeleteImagesTable} from './src/hooks/useImage';
 import {Error, Loading} from './src/components';
@@ -24,13 +24,32 @@ const MainTab = () => (
 
         switch (route.name) {
           case 'Home':
-            icon = <Ionicons name="image-sharp" color={iconColor} size={24} />;
+            icon = (
+              <Entypo name="home" color={iconColor} size={focused ? 28 : 20} />
+            );
             break;
           case 'Search':
-            icon = <Ionicons name="search" color={iconColor} size={24} />;
+            icon = (
+              <Ionicons
+                name="search"
+                color={iconColor}
+                size={focused ? 28 : 20}
+              />
+            );
             break;
           case 'Upload':
-            icon = <Entypo name="plus" color={iconColor} size={24} />;
+            icon = (
+              <Entypo name="plus" color={iconColor} size={focused ? 28 : 20} />
+            );
+            break;
+          case 'Setting':
+            icon = (
+              <Ionicons
+                name="settings-sharp"
+                color={iconColor}
+                size={focused ? 28 : 20}
+              />
+            );
             break;
           default:
             break;
@@ -88,6 +107,13 @@ const MainTab = () => (
       tabBarHideOnKeyboard: true,
       tabBarStyle: {height: 64, paddingTop: 6, paddingBottom: 12},
       tabBarShowLabel: false,
+      // tabBarItemStyle: {
+      //   borderRightColor: Colors.GRAY,
+      //   borderLeftColor: Colors.GRAY,
+      //   borderTopColor: 'transparent',
+      //   borderBottomColor: 'transparent',
+      //   borderWidth: 0.5,
+      // },
       headerShown: false,
     })}>
     <Tab.Screen name="Home" component={Home} options={{unmountOnBlur: true}} />
@@ -97,6 +123,7 @@ const MainTab = () => (
       component={Upload}
       options={{unmountOnBlur: true}}
     />
+    <Tab.Screen name="Setting" component={Setting} />
   </Tab.Navigator>
 );
 
@@ -116,6 +143,7 @@ const App = () => {
       <Stack.Navigator screenOptions={{headerShown: false, animation: 'fade'}}>
         <Stack.Screen name="Root" component={MainTab} />
         <Stack.Screen name="Image" component={Image} />
+        {/* <Stack.Screen name="Setting" component={Setting} /> */}
       </Stack.Navigator>
     </NavigationContainer>
   );
