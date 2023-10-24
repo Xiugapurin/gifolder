@@ -35,21 +35,36 @@ const RenderSections = ({item}) => {
 
 const Setting = ({navigation}) => {
   const ClearCache = () => {
-    try {
-      FastImage.clearDiskCache();
-    } catch (error) {
-      ToastAndroid.showWithGravity(
-        '清除快取時發生錯誤',
-        ToastAndroid.SHORT,
-        ToastAndroid.BOTTOM,
-      );
-    } finally {
-      ToastAndroid.showWithGravity(
-        '已成功清理快取！',
-        ToastAndroid.SHORT,
-        ToastAndroid.BOTTOM,
-      );
-    }
+    FastImage.clearDiskCache()
+      .catch(err => {
+        ToastAndroid.showWithGravity(
+          '清除硬碟快取時發生錯誤',
+          ToastAndroid.SHORT,
+          ToastAndroid.BOTTOM,
+        );
+      })
+      .finally(() => {
+        ToastAndroid.showWithGravity(
+          '已成功清理硬碟快取！',
+          ToastAndroid.SHORT,
+          ToastAndroid.BOTTOM,
+        );
+      });
+    FastImage.clearMemoryCache()
+      .catch(err => {
+        ToastAndroid.showWithGravity(
+          '清除記憶體快取時發生錯誤',
+          ToastAndroid.SHORT,
+          ToastAndroid.BOTTOM,
+        );
+      })
+      .finally(() => {
+        ToastAndroid.showWithGravity(
+          '已成功清理記憶體快取！',
+          ToastAndroid.SHORT,
+          ToastAndroid.BOTTOM,
+        );
+      });
   };
 
   const Sections = [
