@@ -59,7 +59,7 @@ const useFetchSearchImage = () => {
 
     try {
       const response = await fetch(
-        `${TENOR_API_BASE_URL}?q=${searchParam}&key=${TENOR_API_KEY}&client_key=${TENOR_CLIENT_KEY}&country=TW&locale=zh-TW&ar_range=all&media_filter=gif,tinygif&limit=20`,
+        `${TENOR_API_BASE_URL}?q=${searchParam}&key=${TENOR_API_KEY}&client_key=${TENOR_CLIENT_KEY}&country=TW&locale=zh-TW&ar_range=all&media_filter=gif,tinygif&limit=50`,
       );
 
       if (!response.ok) {
