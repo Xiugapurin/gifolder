@@ -93,8 +93,6 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.GRAY,
   },
   selectButtonText: {
-    position: 'relative',
-    top: -2,
     fontSize: 16,
     fontWeight: 'bold',
     marginLeft: 8,

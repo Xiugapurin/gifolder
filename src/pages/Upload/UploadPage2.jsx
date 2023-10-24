@@ -162,8 +162,6 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.WHITE,
   },
   buttonText: {
-    position: 'relative',
-    top: -2,
     fontSize: 16,
     fontWeight: 'bold',
     marginLeft: 4,

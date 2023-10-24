@@ -264,8 +264,6 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.PRIMARY,
   },
   uploadMethodButtonText: {
-    position: 'relative',
-    top: -2,
     marginLeft: 8,
     fontSize: 14,
     fontWeight: 'bold',
@@ -334,8 +332,6 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   nextButtonText: {
-    position: 'relative',
-    top: -2,
     marginLeft: 4,
     fontSize: 16,
     fontWeight: 'bold',

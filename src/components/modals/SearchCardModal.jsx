@@ -11,7 +11,7 @@ import {
 import React, {useState} from 'react';
 import {Colors, Icons} from '../../utils';
 import FastImage from 'react-native-fast-image';
-import {useDeleteImage, useUploadImage} from '../../hooks/useImage';
+import {useUploadImage} from '../../hooks/useImage';
 
 const {Entypo, Ionicons} = Icons;
 
@@ -149,8 +149,6 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   title: {
-    position: 'relative',
-    top: -3,
     marginLeft: 8,
     fontSize: 20,
     fontWeight: 'bold',
@@ -194,8 +192,6 @@ const styles = StyleSheet.create({
     elevation: 1,
   },
   footerButtonText: {
-    position: 'relative',
-    top: -2,
     marginLeft: 4,
     fontSize: 14,
     fontWeight: 'bold',

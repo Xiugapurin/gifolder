@@ -89,8 +89,6 @@ const SearchImageList = ({images, isLoading, error}) => {
     setIsCardMenuModalVisible(!isCardMenuModalVisible);
   };
 
-  console.log(images[0].media_formats);
-
   return (
     <View style={{height: DeviceSize.DeviceHeight, width: '100%'}}>
       <Modal

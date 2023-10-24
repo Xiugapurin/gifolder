@@ -99,8 +99,6 @@ const styles = StyleSheet.create({
     borderRadius: 4,
   },
   filterButtonText: {
-    position: 'relative',
-    top: -2,
     marginLeft: 4,
     fontSize: 14,
     color: Colors.INACTIVE,

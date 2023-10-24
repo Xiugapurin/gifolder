@@ -198,8 +198,6 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   title: {
-    position: 'relative',
-    top: -3,
     marginLeft: 8,
     fontSize: 20,
     fontWeight: 'bold',
@@ -243,8 +241,6 @@ const styles = StyleSheet.create({
     elevation: 1,
   },
   footerButtonText: {
-    position: 'relative',
-    top: -1,
     marginLeft: 4,
     fontSize: 14,
     fontWeight: 'bold',
