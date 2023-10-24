@@ -14,7 +14,7 @@ const Upload = () => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Ionicons name="image-sharp" color={Colors.TITLE} size={36} />
+        <Ionicons name="image-sharp" color={Colors.TITLE} size={32} />
         <Text style={styles.title}>新增圖片</Text>
       </View>
 

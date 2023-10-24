@@ -95,7 +95,7 @@ const Image = ({route, navigation}) => {
           style={styles.backButton}
           activeOpacity={0.8}
           onPress={exit}>
-          <Ionicons name="arrow-back" color={Colors.TITLE} size={28} />
+          <Ionicons name="chevron-back" color={Colors.TITLE} size={28} />
         </TouchableOpacity>
         <Text style={styles.title}>圖片詳情</Text>
       </View>

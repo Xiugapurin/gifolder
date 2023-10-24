@@ -13,7 +13,7 @@ const SearchBar = ({searchParam, setSearchParam}) => {
         placeholderTextColor={Colors.INACTIVE}
         value={searchParam}
         onChangeText={setSearchParam}
-        maxLength={10}
+        maxLength={20}
       />
       <View style={styles.icon}>
         <Ionicons
