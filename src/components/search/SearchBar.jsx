@@ -1,19 +1,11 @@
 import {StyleSheet, View, TextInput, TouchableOpacity} from 'react-native';
 import React, {useState} from 'react';
 import {Colors, Icons} from '../../utils';
+import {useSearchImage} from '../../hooks/useOnlineImageRepo';
 
 const {Ionicons} = Icons;
 
-const SearchBar = ({fetchImage, setIsSearching}) => {
-  const [searchParam, setSearchParam] = useState('');
-
-  const onSearch = () => {
-    if (searchParam !== '') {
-      setIsSearching(true);
-      fetchImage(searchParam);
-    }
-  };
-
+const SearchBar = ({searchParam, setSearchParam}) => {
   return (
     <View style={styles.container}>
       <TextInput
@@ -22,24 +14,20 @@ const SearchBar = ({fetchImage, setIsSearching}) => {
         placeholderTextColor={Colors.INACTIVE}
         value={searchParam}
         onChangeText={setSearchParam}
-        onSubmitEditing={onSearch}
-        maxLength={50}
+        maxLength={40}
       />
-      <TouchableOpacity
-        style={styles.icon}
-        onPress={searchParam ? onSearch : null}>
+      <View style={styles.icon}>
         <Ionicons
           name="search"
           color={searchParam ? Colors.PRIMARY : Colors.INACTIVE}
           size={24}
         />
-      </TouchableOpacity>
+      </View>
       {searchParam && (
         <TouchableOpacity
           style={styles.cancel}
           onPress={() => {
             setSearchParam('');
-            setIsSearching(false);
           }}>
           <Ionicons name="close" color={Colors.TITLE} size={18} />
         </TouchableOpacity>
@@ -58,9 +46,8 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
   input: {
-    flex: 1,
-    paddingRight: 72,
-    paddingLeft: 12,
+    width: '100%',
+    paddingLeft: 48,
     backgroundColor: Colors.GRAY,
     color: Colors.PARAGRAPH,
     borderRadius: 8,
@@ -68,10 +55,10 @@ const styles = StyleSheet.create({
   },
   icon: {
     position: 'absolute',
-    right: 12,
+    left: 12,
   },
   cancel: {
     position: 'absolute',
-    right: 48,
+    right: 12,
   },
 });

@@ -1,38 +1,42 @@
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity, Keyboard} from 'react-native';
 import React, {useState} from 'react';
 import LottieView from 'lottie-react-native';
 import {SearchBar, SearchImageList} from '../components';
-import {useFetchSearchImage} from '../hooks/useOnlineImageRepo';
 import {Colors} from '../utils';
 
 const Search = () => {
-  const [isSearching, setIsSearching] = useState(false);
-  const {fetchImage, images, isLoading, error} = useFetchSearchImage();
+  const [searchParam, setSearchParam] = useState('');
 
   return (
     <View style={styles.container}>
-      <SearchBar fetchImage={fetchImage} setIsSearching={setIsSearching} />
+      <SearchBar searchParam={searchParam} setSearchParam={setSearchParam} />
 
-      {isSearching ? (
-        <SearchImageList images={images} isLoading={isLoading} error={error} />
-      ) : (
-        <View
-          style={{
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}>
-          <LottieView
-            style={{width: '100%'}}
-            autoPlay
-            loop
-            source={require('../assets/animations/search_page.json')}
-          />
-          <Text
-            style={{fontSize: 18, fontWeight: 'bold', color: Colors.PARAGRAPH}}>
-            在這裡搜尋完美的圖片
-          </Text>
-        </View>
-      )}
+      <TouchableOpacity activeOpacity={1} onPress={Keyboard.dismiss}>
+        {searchParam ? (
+          <SearchImageList searchParam={searchParam} />
+        ) : (
+          <View
+            style={{
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <LottieView
+              style={{width: '100%'}}
+              autoPlay
+              loop
+              source={require('../assets/animations/search_page.json')}
+            />
+            <Text
+              style={{
+                fontSize: 18,
+                fontWeight: 'bold',
+                color: Colors.PARAGRAPH,
+              }}>
+              在這裡搜尋完美的圖片
+            </Text>
+          </View>
+        )}
+      </TouchableOpacity>
     </View>
   );
 };

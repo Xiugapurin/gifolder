@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {useEffect, useRef, useState} from 'react';
 import {
   IMGUR_API_BASE_URL,
   IMGUR_API_TOKEN,
@@ -49,12 +49,58 @@ const useUploadImage = () => {
   return {uploadImage, uploading, error};
 };
 
-const useFetchSearchImage = () => {
+const useSearchImage = searchParam => {
   const [images, setImages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const fetchImage = async searchParam => {
+  const searchTimeoutRef = useRef(null);
+
+  useEffect(() => {
+    if (searchTimeoutRef.current) {
+      clearTimeout(searchTimeoutRef.current);
+    }
+
+    searchTimeoutRef.current = setTimeout(() => {
+      const fetchImagesFromTenor = async () => {
+        setIsLoading(true);
+        try {
+          const response = await fetch(
+            `${TENOR_API_BASE_URL}?q=${searchParam}&key=${TENOR_API_KEY}&client_key=${TENOR_CLIENT_KEY}&country=TW&locale=zh-TW&ar_range=all&media_filter=gif,tinygif&limit=50`,
+          );
+          console.log('Fetching!!!');
+
+          if (!response.ok) {
+            throw new Error('API 請求失敗');
+          }
+
+          const data = await response.json();
+
+          const results = data.results || [];
+
+          // 將圖片結果設置到狀態中
+          setImages(results);
+          setError(null);
+        } catch (error) {
+          setError('搜尋圖片失敗');
+        } finally {
+          setIsLoading(false);
+        }
+      };
+
+      fetchImagesFromTenor();
+    }, 300);
+  }, [searchParam]);
+
+  return {images, isLoading, error};
+};
+
+const useSearchSuggestion = () => {
+  const [suggestions, setSuggestions] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  const getSearchSuggestion = async searchParam => {
     setIsLoading(true);
 
     try {
@@ -71,16 +117,16 @@ const useFetchSearchImage = () => {
       const results = data.results || [];
 
       // 將圖片結果設置到狀態中
-      setImages(results);
+      setSuggestions(results);
       setError(null);
     } catch (error) {
-      setError('搜尋圖片失敗');
+      setError('暫時無法取得搜尋建議');
     } finally {
       setIsLoading(false);
     }
   };
 
-  return {fetchImage, images, isLoading, error};
+  return {getSearchSuggestion, suggestions, isLoading, error};
 };
 
-export {useUploadImage, useFetchSearchImage};
+export {useUploadImage, useSearchImage, useSearchSuggestion};

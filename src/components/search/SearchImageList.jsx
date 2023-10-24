@@ -9,6 +9,7 @@ import Loading from '../common/Loading';
 import Error from '../common/Error';
 import Empty from '../common/Empty';
 import SearchCardModal from '../modals/SearchCardModal';
+import {useSearchImage} from '../../hooks/useOnlineImageRepo';
 
 const Card = ({
   item,
@@ -72,7 +73,8 @@ const Footer = () => (
   </View>
 );
 
-const SearchImageList = ({images, isLoading, error}) => {
+const SearchImageList = ({searchParam}) => {
+  const {images, isLoading, error} = useSearchImage(searchParam);
   const [isCardMenuModalVisible, setIsCardMenuModalVisible] = useState(false);
   const [activeItem, setActiveItem] = useState(null);
   const [activeItemAspectRatio, setActiveItemAspectRatio] = useState(16 / 9);
@@ -117,7 +119,7 @@ const SearchImageList = ({images, isLoading, error}) => {
         showsVerticalScrollIndicator={false}
         ListHeaderComponent={<View />}
         ListEmptyComponent={<Empty />}
-        ListFooterComponent={<Footer />}
+        ListFooterComponent={images.length > 0 && <Footer />}
         onEndReached={() => console.log('onEndReached')}
         estimatedItemSize={50}
         numColumns={2}
