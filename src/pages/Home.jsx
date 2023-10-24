@@ -84,9 +84,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    marginBottom: 16,
   },
   title: {
-    marginBottom: 12,
     fontSize: 20,
     fontWeight: 'bold',
     color: Colors.TITLE,

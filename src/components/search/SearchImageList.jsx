@@ -141,13 +141,13 @@ export default SearchImageList;
 const styles = StyleSheet.create({
   titleRow: {
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'baseline',
+    marginBottom: 16,
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
     color: Colors.TITLE,
-    marginBottom: 12,
   },
   subtitle: {
     fontSize: 14,
@@ -158,7 +158,7 @@ const styles = StyleSheet.create({
   card: {
     flex: 1,
     justifyContent: 'space-between',
-    marginTop: 12,
+    marginBottom: 12,
     borderRadius: 4,
     backgroundColor: Colors.WHITE,
     elevation: 3,

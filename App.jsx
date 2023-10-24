@@ -38,55 +38,56 @@ const MainTab = () => (
 
         return icon;
       },
-      tabBarLabel: ({focused}) => {
-        let label;
-        const labelColor = focused ? PRIMARY : INACTIVE;
+      // tabBarLabel: ({focused}) => {
+      //   let label;
+      //   const labelColor = focused ? PRIMARY : INACTIVE;
 
-        switch (route.name) {
-          case 'Home':
-            label = (
-              <Text
-                style={{
-                  color: labelColor,
-                  fontSize: 12,
-                  fontWeight: 'bold',
-                }}>
-                圖庫
-              </Text>
-            );
-            break;
-          case 'Search':
-            label = (
-              <Text
-                style={{
-                  color: labelColor,
-                  fontSize: 12,
-                  fontWeight: 'bold',
-                }}>
-                搜尋
-              </Text>
-            );
-            break;
-          case 'Upload':
-            label = (
-              <Text
-                style={{
-                  color: labelColor,
-                  fontSize: 12,
-                  fontWeight: 'bold',
-                }}>
-                新增
-              </Text>
-            );
-            break;
-          default:
-            break;
-        }
+      //   switch (route.name) {
+      //     case 'Home':
+      //       label = (
+      //         <Text
+      //           style={{
+      //             color: labelColor,
+      //             fontSize: 12,
+      //             fontWeight: 'bold',
+      //           }}>
+      //           圖庫
+      //         </Text>
+      //       );
+      //       break;
+      //     case 'Search':
+      //       label = (
+      //         <Text
+      //           style={{
+      //             color: labelColor,
+      //             fontSize: 12,
+      //             fontWeight: 'bold',
+      //           }}>
+      //           搜尋
+      //         </Text>
+      //       );
+      //       break;
+      //     case 'Upload':
+      //       label = (
+      //         <Text
+      //           style={{
+      //             color: labelColor,
+      //             fontSize: 12,
+      //             fontWeight: 'bold',
+      //           }}>
+      //           新增
+      //         </Text>
+      //       );
+      //       break;
+      //     default:
+      //       break;
+      //   }
 
-        return label;
-      },
+      //   return label;
+      // },
       tabBarHideOnKeyboard: true,
       tabBarStyle: {height: 64, paddingTop: 6, paddingBottom: 12},
+      tabBarShowLabel: false,
       headerShown: false,
     })}>
     <Tab.Screen name="Home" component={Home} options={{unmountOnBlur: true}} />

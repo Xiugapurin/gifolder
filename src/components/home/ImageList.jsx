@@ -118,7 +118,7 @@ const ImageList = ({searchParam, orderBy, order}) => {
 
   return (
     <View style={{height: DeviceSize.DeviceHeight, width: '100%'}}>
-      <Modal
+      {/* <Modal
         isVisible={isCardMenuModalVisible}
         animationIn={'zoomIn'}
         animationOInTiming={100}
@@ -133,13 +133,14 @@ const ImageList = ({searchParam, orderBy, order}) => {
           activeItem={activeItem}
           onRefresh={onRefresh}
         />
-      </Modal>
+      </Modal> */}
 
       <MasonryFlashList
         showsVerticalScrollIndicator={false}
         ListHeaderComponent={<View />}
         ListEmptyComponent={searchParam ? <Empty /> : <EmptyItem />}
-        ListFooterComponent={<View style={{height: 300}} />}
+        ListFooterComponent={<View style={{marginTop: 200}} />}
+        contentContainerStyle={{}}
         refreshControl={
           <RefreshControl
             refreshing={isLoading}
@@ -170,7 +171,7 @@ const styles = StyleSheet.create({
   card: {
     flex: 1,
     justifyContent: 'space-between',
-    marginTop: 12,
+    marginBottom: 12,
     borderRadius: 4,
     backgroundColor: Colors.WHITE,
     elevation: 3,
