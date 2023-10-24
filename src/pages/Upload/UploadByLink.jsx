@@ -157,6 +157,7 @@ const styles = StyleSheet.create({
   extensionButton: {
     paddingVertical: 8,
     paddingHorizontal: 16,
+    marginBottom: 4,
     borderRadius: 4,
     backgroundColor: Colors.WHITE,
     elevation: 2,
