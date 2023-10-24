@@ -21,8 +21,8 @@ const {Ionicons, Entypo} = Icons;
 
 const Image = ({route, navigation}) => {
   const {imageInfo} = route.params;
-
-  const {ID, title, uri, aspect_ratio} = imageInfo;
+  console.log(imageInfo);
+  const {ID, title, uri, tiny_uri, aspect_ratio} = imageInfo;
   const [prevTitle, setPrevTitle] = useState(title);
   const [imageTitle, setImageTitle] = useState(title);
   const [imageTitleLength, setImageTitleLength] = useState(title.length);
@@ -107,7 +107,7 @@ const Image = ({route, navigation}) => {
           onPress={Keyboard.dismiss}
           activeOpacity={1}>
           <FastImage
-            source={{uri: uri}}
+            source={{uri: tiny_uri ? tiny_uri : uri}}
             style={{
               width: '100%',
               aspectRatio: aspect_ratio,

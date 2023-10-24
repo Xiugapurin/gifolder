@@ -28,7 +28,7 @@ const Card = ({
   };
 
   const onCardLongPress = async () => {
-    Clipboard.setString(image?.url);
+    Clipboard.setString(item?.media_formats?.gif?.url);
   };
 
   return (

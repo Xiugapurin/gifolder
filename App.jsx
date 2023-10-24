@@ -6,7 +6,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {Icons, Colors} from './src/utils';
 import {Home, Image, Search, Upload} from './src/pages';
 import {Text} from 'react-native';
-import {useCreateTable} from './src/hooks/useImage';
+import {useCreateTable, useDeleteImagesTable} from './src/hooks/useImage';
 import {Error, Loading} from './src/components';
 
 const {PRIMARY, INACTIVE} = Colors;

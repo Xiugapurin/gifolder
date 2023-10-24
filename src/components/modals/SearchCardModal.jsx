@@ -41,6 +41,7 @@ const SearchCardModal = ({toggleModal, activeItem, activeItemAspectRatio}) => {
   const onAddButtonPress = () => {
     uploadImage(
       activeItem?.media_formats.gif.url,
+      activeItem?.media_formats.tinygif.url,
       imageTitle,
       activeItemAspectRatio,
     )
@@ -179,7 +180,7 @@ const styles = StyleSheet.create({
   },
   footer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'space-evenly',
     alignItems: 'center',
   },
   footerButton: {

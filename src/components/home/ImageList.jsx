@@ -35,6 +35,8 @@ const Card = ({item, i, setActiveItem, toggleModal}) => {
     Clipboard.setString(item.uri);
   };
 
+  console.log(item);
+
   return (
     <TouchableOpacity
       style={[styles.card, {marginLeft: i % 2 === 0 ? 0 : 12}]}
@@ -43,7 +45,7 @@ const Card = ({item, i, setActiveItem, toggleModal}) => {
       delayLongPress={500}
       onLongPress={onCardLongPress}>
       <FastImage
-        source={{uri: item.uri}}
+        source={{uri: item.tiny_uri ? item.tiny_uri : item.uri}}
         style={{
           width: '100%',
           aspectRatio: item.aspect_ratio,

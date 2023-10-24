@@ -4,14 +4,14 @@ import {Colors, Icons} from '../../utils';
 
 const {Ionicons} = Icons;
 
-const SearchBar = ({
-  fetchImage,
-  setIsSearching,
-}) => {
+const SearchBar = ({fetchImage, setIsSearching}) => {
   const [searchParam, setSearchParam] = useState('');
+
   const onSearch = () => {
-    setIsSearching(true);
-    fetchImage(searchParam);
+    if (searchParam !== '') {
+      setIsSearching(true);
+      fetchImage(searchParam);
+    }
   };
 
   return (
@@ -22,6 +22,7 @@ const SearchBar = ({
         placeholderTextColor={Colors.INACTIVE}
         value={searchParam}
         onChangeText={setSearchParam}
+        onSubmitEditing={onSearch}
         maxLength={50}
       />
       <TouchableOpacity

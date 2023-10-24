@@ -26,7 +26,7 @@ const UploadPage2 = ({toPrev, imageURI, imageAspectRatio}) => {
   };
 
   const onUploadPress = async () => {
-    await uploadImage(imageURI, imageTitle, imageAspectRatio);
+    await uploadImage(imageURI, '', imageTitle, imageAspectRatio);
     navigation.navigate('Home');
   };
 

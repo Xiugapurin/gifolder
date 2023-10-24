@@ -22,7 +22,7 @@ const useCreateTable = () => {
         tx.executeSql(
           'CREATE TABLE IF NOT EXISTS ' +
             'images ' +
-            '(ID INTEGER PRIMARY KEY AUTOINCREMENT, uri TEXT NOT NULL, title TEXT, aspect_ratio INTEGER, upload_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP);',
+            '(ID INTEGER PRIMARY KEY AUTOINCREMENT, uri TEXT NOT NULL, tiny_uri TEXT, title TEXT, aspect_ratio INTEGER, upload_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP);',
           [],
           () => {
             console.log('資料表創建成功');
@@ -132,7 +132,7 @@ const useUploadImage = () => {
   const [complete, setComplete] = useState(false);
   const [error, setError] = useState(null);
 
-  const uploadImage = async (imageURI, title, aspectRatio) => {
+  const uploadImage = async (imageURI, imageTinyURI, title, aspectRatio) => {
     setUploading(true);
 
     try {
@@ -140,8 +140,8 @@ const useUploadImage = () => {
 
       db.transaction(tx => {
         tx.executeSql(
-          'INSERT INTO images (uri, title, aspect_ratio) VALUES (?, ?, ?)',
-          [imageURI, imageTitle, aspectRatio],
+          'INSERT INTO images (uri, tiny_uri, title, aspect_ratio) VALUES (?, ?, ?, ?)',
+          [imageURI, imageTinyURI, imageTitle, aspectRatio],
           () => {
             console.log('圖片已上傳並保存');
             setComplete(true);
