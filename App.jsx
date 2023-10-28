@@ -145,7 +145,7 @@ const App = () => {
         screenOptions={{
           headerShown: false,
           animation: 'fade',
-          animationDuration: 500,
+          animationDuration: 100,
         }}>
         <Stack.Screen name="Root" component={MainTab} />
         <Stack.Screen name="Image" component={Image} />

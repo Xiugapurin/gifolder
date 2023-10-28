@@ -4,6 +4,7 @@ import {
   StyleSheet,
   RefreshControl,
   TouchableOpacity,
+  ToastAndroid,
 } from 'react-native';
 import {useState} from 'react';
 import FastImage from 'react-native-fast-image';
@@ -18,18 +19,19 @@ import Empty from '../common/Empty';
 
 const {Ionicons, Entypo} = Icons;
 
-const Card = ({item, i, setActiveItem, toggleModal}) => {
+const Card = ({item, i}) => {
   const navigation = useNavigation();
-  // const onCardPress = async () => {
-  //   setActiveItem(item);
-  //   toggleModal();
-  // };
 
   const onCardPress = () => {
     navigation.push('Image', {imageInfo: item});
   };
 
   const onCardLongPress = () => {
+    ToastAndroid.showWithGravity(
+      '已複製到剪貼簿',
+      ToastAndroid.SHORT,
+      ToastAndroid.BOTTOM,
+    );
     Clipboard.setString(item.uri);
   };
 
@@ -92,8 +94,6 @@ const EmptyItem = () => {
 };
 
 const ImageList = ({searchParam, orderBy, order}) => {
-  const [isCardMenuModalVisible, setIsCardMenuModalVisible] = useState(false);
-  const [activeItem, setActiveItem] = useState(null);
   const {images, isLoading, onRefresh, error} = useFetchImages(
     searchParam,
     orderBy,
@@ -107,10 +107,6 @@ const ImageList = ({searchParam, orderBy, order}) => {
   if (error) {
     return <Error error={error} />;
   }
-
-  const toggleModal = () => {
-    setIsCardMenuModalVisible(!isCardMenuModalVisible);
-  };
 
   return (
     <View style={{height: DeviceSize.DeviceHeight, width: '100%'}}>
@@ -148,14 +144,7 @@ const ImageList = ({searchParam, orderBy, order}) => {
         estimatedItemSize={200}
         numColumns={2}
         data={images}
-        renderItem={({item, index}) => (
-          <Card
-            item={item}
-            i={index}
-            setActiveItem={setActiveItem}
-            toggleModal={toggleModal}
-          />
-        )}
+        renderItem={({item, index}) => <Card item={item} i={index} />}
       />
     </View>
   );

@@ -12,14 +12,12 @@ import {useSearchSuggestion} from '../../hooks/useOnlineImageRepo';
 const {Ionicons} = Icons;
 
 const buttonColors = [
-  {backgroundColor: Colors.WHITE, textColor: Colors.TITLE},
   {backgroundColor: Colors.PRIMARY, textColor: Colors.WHITE},
+  {backgroundColor: Colors.WHITE, textColor: Colors.TITLE},
 ];
 
 const SearchBar = ({searchParam, setSearchParam}) => {
   const {suggestions, isLoading, error} = useSearchSuggestion(searchParam);
-
-  console.log(suggestions);
 
   return (
     <>

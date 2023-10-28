@@ -1,5 +1,11 @@
-import {Text, View, StyleSheet, TouchableOpacity} from 'react-native';
-import {useState, useEffect} from 'react';
+import {
+  Text,
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  ToastAndroid,
+} from 'react-native';
+import {useState} from 'react';
 import FastImage from 'react-native-fast-image';
 import Modal from 'react-native-modal';
 import Clipboard from '@react-native-clipboard/clipboard';
@@ -28,7 +34,12 @@ const Card = ({
     toggleModal();
   };
 
-  const onCardLongPress = async () => {
+  const onCardLongPress = () => {
+    ToastAndroid.showWithGravity(
+      '已複製到剪貼簿',
+      ToastAndroid.SHORT,
+      ToastAndroid.BOTTOM,
+    );
     Clipboard.setString(item?.media_formats?.gif?.url);
   };
 
@@ -84,7 +95,7 @@ const SearchImageList = ({searchParam}) => {
   }
 
   if (error) {
-    return <Error />;
+    return <Error error={error} />;
   }
 
   const toggleModal = () => {
@@ -134,6 +145,8 @@ const SearchImageList = ({searchParam}) => {
           />
         )}
       />
+
+      <View style={{height: 200}} />
     </View>
   );
 };
