@@ -7,7 +7,12 @@ import FastImage from 'react-native-fast-image';
 import SettingImage from './src/assets/images/Dorito.png';
 import {Icons, Colors} from './src/utils';
 import {Changelog, Home, Image, Search, Setting, Upload} from './src/pages';
-import {useCreateTable, useDeleteImagesTable} from './src/hooks/useImage';
+import {
+  useCreateTable,
+  useDeleteImage,
+  useDeleteImagesTable,
+  useUpdateImagesTable,
+} from './src/hooks/useImage';
 import {Error, Loading} from './src/components';
 
 const {PRIMARY, INACTIVE} = Colors;

@@ -12,7 +12,7 @@ import React, {useState} from 'react';
 import Clipboard from '@react-native-clipboard/clipboard';
 import {Colors, Icons} from '../../utils';
 import FastImage from 'react-native-fast-image';
-import useUpdateImage, {useDeleteImage} from '../../hooks/useImage';
+import {useUpdateImage, useDeleteImage} from '../../hooks/useImage';
 
 const {Ionicons} = Icons;
 

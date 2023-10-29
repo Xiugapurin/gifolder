@@ -14,7 +14,7 @@ import FastImage from 'react-native-fast-image';
 import Modal from 'react-native-modal';
 import {Icons, Colors} from '../utils';
 import Clipboard from '@react-native-clipboard/clipboard';
-import useUpdateImage from '../hooks/useImage';
+import {useUpdateImage} from '../hooks/useImage';
 import {WarningModal} from '../components';
 
 const {Ionicons, Entypo} = Icons;
@@ -156,6 +156,7 @@ const Image = ({route, navigation}) => {
                   style={[styles.renameButton, {backgroundColor: Colors.WHITE}]}
                   onPress={() => {
                     setImageTitle(title);
+                    setImageTitleLength(title.length);
                   }}>
                   <Text
                     style={{

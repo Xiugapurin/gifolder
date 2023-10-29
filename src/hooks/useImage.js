@@ -22,10 +22,10 @@ const useCreateTable = () => {
         tx.executeSql(
           'CREATE TABLE IF NOT EXISTS ' +
             'images ' +
-            '(ID INTEGER PRIMARY KEY AUTOINCREMENT, uri TEXT NOT NULL, tiny_uri TEXT, title TEXT, aspect_ratio INTEGER, upload_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP);',
+            '(ID INTEGER PRIMARY KEY AUTOINCREMENT, uri TEXT, tiny_uri TEXT, title TEXT, aspect_ratio INTEGER,is_public BOOLEAN DEFAULT 0, upload_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP);',
           [],
           () => {
-            console.log('資料表創建成功');
+            console.log('images資料表創建成功');
             setIsLoading(false);
           },
           error => {
@@ -60,7 +60,7 @@ const useFetchImages = (
 
       db.transaction(tx => {
         tx.executeSql(
-          `SELECT * FROM Images WHERE title LIKE ? OR uri LIKE ? ${orderByClause}`,
+          `SELECT * FROM images WHERE title LIKE ? OR uri LIKE ? ${orderByClause}`,
           [`%${searchParam}%`, `%${searchParam}%`],
           (tx, results) => {
             const rows = results.rows;
@@ -140,8 +140,8 @@ const useUploadImage = () => {
 
       db.transaction(tx => {
         tx.executeSql(
-          'INSERT INTO images (uri, tiny_uri, title, aspect_ratio) VALUES (?, ?, ?, ?)',
-          [imageURI, imageTinyURI, imageTitle, aspectRatio],
+          'INSERT INTO images (uri, tiny_uri, title, aspect_ratio, is_public) VALUES (?, ?, ?, ?, ?)',
+          [imageURI, imageTinyURI, imageTitle, aspectRatio, false],
           () => {
             console.log('圖片已上傳並保存');
             setComplete(true);
@@ -197,8 +197,6 @@ const useUpdateImage = () => {
 
   return {updateImageTitle, updating, error};
 };
-
-export default useUpdateImage;
 
 const useDeleteImage = () => {
   const [error, setError] = useState(null);
@@ -258,11 +256,99 @@ const useDeleteImagesTable = () => {
   return {deleteImagesTable, error};
 };
 
+const useUpdateImagesTable = () => {
+  const [error, setError] = useState(null);
+
+  const updateTable = async () => {
+    db.transaction(tx => {
+      tx.executeSql(
+        'PRAGMA foreign_keys=off;',
+        [],
+        () => {
+          tx.executeSql(
+            'BEGIN TRANSACTION;',
+            [],
+            () => {
+              tx.executeSql(
+                'CREATE TABLE IF NOT EXISTS ' +
+                  'images_temp ' +
+                  '(ID INTEGER PRIMARY KEY AUTOINCREMENT, uri TEXT, title TEXT, aspect_ratio INTEGER, upload_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP, tiny_uri TEXT, is_public BOOLEAN DEFAULT 0);',
+                [],
+                () => {
+                  tx.executeSql(
+                    'INSERT INTO images_temp (uri, tiny_uri, title, aspect_ratio, is_public) SELECT uri, uri as tiny_uri, title, aspect_ratio, ? FROM images;',
+                    [false],
+                    () => {
+                      tx.executeSql(
+                        'DROP TABLE images;',
+                        [],
+                        () => {
+                          tx.executeSql(
+                            'ALTER TABLE images_temp RENAME TO images;',
+                            [],
+                            () => {
+                              tx.executeSql(
+                                'COMMIT;',
+                                [],
+                                () => {
+                                  console.log('新資料表更新成功');
+                                  setIsLoading(false);
+                                },
+                                error => {
+                                  console.log('SQL error:', error);
+                                  setIsLoading(false);
+                                },
+                              );
+                            },
+                            error => {
+                              console.log('SQL error:', error);
+                              setIsLoading(false);
+                            },
+                          );
+                        },
+                        error => {
+                          console.log('SQL error:', error);
+                          setIsLoading(false);
+                        },
+                      );
+                    },
+                    error => {
+                      console.log('SQL error:', error);
+                      setIsLoading(false);
+                    },
+                  );
+                },
+                error => {
+                  console.log('SQL error:', error);
+                  setIsLoading(false);
+                },
+              );
+            },
+            error => {
+              console.log('SQL error:', error);
+              setIsLoading(false);
+            },
+          );
+        },
+        error => {
+          console.log('SQL error:', error);
+          setIsLoading(false);
+          setError('發生錯誤，請稍後再試');
+        },
+      );
+    });
+  };
+
+  return {updateTable, error};
+};
+
 export {
   useCreateTable,
   useFetchImages,
   useFetchImagesBySearchParam,
   useUploadImage,
+  useUpdateImage,
   useDeleteImage,
   useDeleteImagesTable,
+  useUpdateImagesTable,
 };

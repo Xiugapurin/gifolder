@@ -7,8 +7,12 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import FastImage from 'react-native-fast-image';
-import DoritoImage from '../../assets/images/Dorito.png';
 import {Colors, Icons} from '../../utils';
+import {useUpdateImagesTable} from '../../hooks/useImage';
+import {
+  useCreateUpdatesTable,
+  useSetIsUpdatedToTrue,
+} from '../../hooks/useSetting';
 
 const {Ionicons, Entypo} = Icons;
 
@@ -34,6 +38,31 @@ const RenderSections = ({item}) => {
 };
 
 const Setting = ({navigation}) => {
+  const {updateTable} = useUpdateImagesTable();
+  const {checkOrCreateTable} = useCreateUpdatesTable();
+  const {setIsUpdatedToTrue} = useSetIsUpdatedToTrue();
+
+  const checkUpdate = async () => {
+    const isUpdated = await checkOrCreateTable();
+
+    if (!isUpdated) {
+      await updateTable();
+      await setIsUpdatedToTrue();
+
+      ToastAndroid.showWithGravity(
+        '已成功更新！',
+        ToastAndroid.SHORT,
+        ToastAndroid.BOTTOM,
+      );
+    } else {
+      ToastAndroid.showWithGravity(
+        '應用程式已是最新版！',
+        ToastAndroid.SHORT,
+        ToastAndroid.BOTTOM,
+      );
+    }
+  };
+
   const ClearCache = () => {
     FastImage.clearDiskCache()
       .catch(err => {
@@ -132,6 +161,15 @@ const Setting = ({navigation}) => {
           description: '',
           onPress: () => {
             navigation.push('Changelog');
+          },
+        },
+        {
+          key: 'sec-3-btn-2',
+          icon: <Entypo name="tools" size={20} color={Colors.TITLE} />,
+          title: '手動修復',
+          description: '',
+          onPress: () => {
+            checkUpdate();
           },
         },
       ],
